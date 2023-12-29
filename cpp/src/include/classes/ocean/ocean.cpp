@@ -1,5 +1,10 @@
 #include "ocean.h"
 
+enum direction{
+    HORIZONTAL,  //0
+    VERTICAL    //1
+};
+
 Ocean::Ocean(int columns, int rows){
     columns_ = columns;
     rows_ = rows;
@@ -12,6 +17,28 @@ Ocean::Ocean(int columns, int rows){
     }
 }
 
+bool Ocean::isSpaceOccupied(int init_x_cord, int init_y_cord, int direction, int length){
+    for(int i = 0; i < length; i++){
+        if(direction == HORIZONTAL && getCell(init_x_cord + i, init_y_cord).getIsOccupied()){
+            return true;
+        }
+        else if(direction == VERTICAL && getCell(init_x_cord, init_y_cord + i).getIsOccupied()){
+            return true;
+        }
+    }
+    return false;
+}
+
+int Ocean::getNumberOfRows(){
+    return rows_;
+}
+int Ocean::getNumberOfColumns(){
+    return columns_;
+}
+
 Cell& Ocean::getCell(int x, int y){
+    if(x >= columns_ || y >= rows_){
+        throw std::runtime_error("Out of bounds");
+    }
     return ocean_[x + y * columns_];
 }
