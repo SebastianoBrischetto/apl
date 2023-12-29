@@ -6,25 +6,47 @@ enum direction{
     VERTICAL    //1
 };
 
+void showOccupiedCells(Ocean ocean);
+void showHitCells(Ocean ocean);
+
 int main() {
-
-    /*
-    Submarine ship = Submarine(1,2, HORIZONTAL);
-    int ship_length = ship.getDimension();
-    for(int i = 0; i<ship_length; i++){
-        std::cout << "Pezzo " << i << " della nave nella posizione: {" << ship.getXCord(i) << "," << ship.getYCord(i) << "}" << std::endl;
-    }
-    */
-
     Ocean ocean = Ocean(10,10);
-    std::cout << "cell {1,2} has been hit? " << ocean.getCell(1,2).getIsHit() << std::endl;
-    ocean.getCell(1,2).setIsHit();
-    std::cout << "cell {1,2} has been hit? " << ocean.getCell(1,2).getIsHit() << std::endl;
-
-    Submarine submarine = Submarine(1, 1, HORIZONTAL, ocean);
-    for(int i = 0; i<submarine.getDimension(); i++){
-        std::cout << "Piece " << i << " is hit? " << submarine.getPiece(i).getIsHit() << std::endl;
-    }
-
+    Submarine submarine1 = Submarine(7, 9, HORIZONTAL, ocean);
+    Submarine submarine2 = Submarine(2, 0, VERTICAL, ocean);
+    Submarine submarine3 = Submarine(1, 1, HORIZONTAL, ocean);
+    showOccupiedCells(ocean);
     return 0;
+}
+
+
+void showOccupiedCells(Ocean ocean){
+    for(int x = 0; x < ocean.getNumberOfColumns(); x++){
+        std::cout << "  |  " << x;
+    };
+    std::cout << std::endl << "--------------------------------------------------------------" << std::endl;
+    std::string symbol;
+    for(int y = 0; y < ocean.getNumberOfRows(); y++){
+        std:: cout << y << " | ";
+        for(int x = 0; x < ocean.getNumberOfColumns(); x++){
+            symbol = ((ocean.getCell(x,y).getIsOccupied())? "o" : " ");
+            std::cout << " " << symbol << "  | ";
+        }
+        std::cout << std::endl << "--------------------------------------------------------------" << std::endl;
+    }
+}
+
+void showHitCells(Ocean ocean){
+    for(int x = 0; x < ocean.getNumberOfColumns(); x++){
+        std::cout << "  |  " << x;
+    };
+    std::cout << std::endl << "--------------------------------------------------------------" << std::endl;
+    std::string symbol;
+    for(int y = 0; y < ocean.getNumberOfRows(); y++){
+        std:: cout << y << " | ";
+        for(int x = 0; x < ocean.getNumberOfColumns(); x++){
+            symbol = ((ocean.getCell(x,y).getIsHit())? "o" : " ");
+            std::cout << " " << symbol << "  | ";
+        }
+        std::cout << std::endl << "--------------------------------------------------------------" << std::endl;
+    }
 }
