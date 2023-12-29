@@ -1,52 +1,72 @@
 #include <iostream>
-#include "include/classes/include_all.h"
+#include <ctime>
+#include "include/classes/fleet/fleet.h"
 
-enum direction{
-    HORIZONTAL,  //0
-    VERTICAL    //1
-};
-
-void showOccupiedCells(Ocean ocean);
-void showHitCells(Ocean ocean);
+void showCells(Ocean& ocean){
+    for(int x = 0; x < ocean.getNumberOfColumns(); x++){
+        std::cout << "  |  " << x;
+    };
+    std::cout << std::endl << "--------------------------------------------------------------" << std::endl;
+    std::string symbol;
+    for(int y = 0; y < ocean.getNumberOfRows(); y++){
+        std:: cout << y << " | ";
+        for(int x = 0; x < ocean.getNumberOfColumns(); x++){
+            std::cout<< "\033[1m";
+            symbol = " ";
+            //symbol = (ocean.getCell(x,y).getIsOccupied())? "\033[34m0" : symbol;
+            symbol = ocean.getCell(x,y).getIsHit() ? ocean.getCell(x,y).getIsOccupied() ? "\033[31m\u00D8" : "\033[33m/" : symbol ;
+            std::cout << " " << symbol << "  \033[0m| ";
+        }
+        std::cout << std::endl << "--------------------------------------------------------------" << std::endl;
+    }
+}
 
 int main() {
-    Ocean ocean = Ocean(10,10);
-    Submarine submarine1 = Submarine(7, 9, HORIZONTAL, ocean);
-    Submarine submarine2 = Submarine(2, 0, VERTICAL, ocean);
-    Submarine submarine3 = Submarine(1, 1, HORIZONTAL, ocean);
-    showOccupiedCells(ocean);
-    return 0;
-}
+    std::srand(static_cast<unsigned>(std::time(nullptr)));
 
 
-void showOccupiedCells(Ocean ocean){
-    for(int x = 0; x < ocean.getNumberOfColumns(); x++){
-        std::cout << "  |  " << x;
-    };
-    std::cout << std::endl << "--------------------------------------------------------------" << std::endl;
-    std::string symbol;
-    for(int y = 0; y < ocean.getNumberOfRows(); y++){
-        std:: cout << y << " | ";
-        for(int x = 0; x < ocean.getNumberOfColumns(); x++){
-            symbol = ((ocean.getCell(x,y).getIsOccupied())? "o" : " ");
-            std::cout << " " << symbol << "  | ";
+    int columns = 10, rows = 10, destroyers = 5, sumbarines = 3;
+    /*
+    std::cout << "Inserisci il numero di colonne" << std::endl;
+    std::cin >> columns;
+    std::cout << "Inserisci il numero di righe" << std::endl;
+    std::cin >> rows;
+    std::cout << "Inserisci il numero di navi destroyer" << std::endl;
+    std::cin >> destroyers;
+    std::cout << "Inserisci il numero di navi sumbarine" << std::endl;
+    std::cin >> sumbarines;
+    */
+    Ocean ocean = Ocean(columns, rows);
+    Fleet fleet = Fleet(DESTROYER, destroyers, ocean);
+    fleet.addToFleet(SUBMARINE, sumbarines, ocean);
+    bool game_over = false;
+    int x;
+    int y;
+    int counter = 0;
+    showCells(ocean);
+    std::cout << "ROUND: " << counter << std::endl;
+    while(!game_over){
+        std::system("clear");
+        showCells(ocean);
+        std::cout << "ROUND: " << counter << std::endl;
+        counter++;
+        /*
+        std::cout << std::endl << "Inserisci la coordinata x da colpire: ";
+        std::cin >> x;
+        std::cout << "Inserisci la coordinata y da colpire: ";
+        std::cin >> y;
+        */
+        while(true){
+            try{
+                ocean.getCell(rand()%columns,rand()%rows).setIsHit();
+                break;
+            }catch(const std::exception& e){};
         }
-        std::cout << std::endl << "--------------------------------------------------------------" << std::endl;
-    }
-}
-
-void showHitCells(Ocean ocean){
-    for(int x = 0; x < ocean.getNumberOfColumns(); x++){
-        std::cout << "  |  " << x;
+        std::system("sleep 0.1");
+        game_over = fleet.getIsFleetDestroyed();
     };
-    std::cout << std::endl << "--------------------------------------------------------------" << std::endl;
-    std::string symbol;
-    for(int y = 0; y < ocean.getNumberOfRows(); y++){
-        std:: cout << y << " | ";
-        for(int x = 0; x < ocean.getNumberOfColumns(); x++){
-            symbol = ((ocean.getCell(x,y).getIsHit())? "o" : " ");
-            std::cout << " " << symbol << "  | ";
-        }
-        std::cout << std::endl << "--------------------------------------------------------------" << std::endl;
-    }
+    std::system("clear");
+    showCells(ocean);
+    std::cout << "ROUND: " << counter << std::endl;
+    std::cout << "Partita finita" << std::endl;
 }

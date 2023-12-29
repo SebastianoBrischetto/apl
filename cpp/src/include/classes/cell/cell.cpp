@@ -14,18 +14,21 @@ int Cell::getYCord() {
     return y_cord_;
 }
 
-void Cell::setIsHit() {
-    is_hit_ = true;
-}
-
 bool Cell::getIsHit() {
     return is_hit_;
 }
 
-void Cell::setIsOccupied() {
-    is_occupied_ = true;
-}
-
 bool Cell::getIsOccupied() {
     return is_occupied_;
+}
+
+void Cell::setIsHit() {
+    if(is_hit_){
+        throw std::runtime_error("Space already hit");
+    }
+    is_hit_ = true;
+}
+
+void Cell::setIsOccupied() {
+    is_occupied_ = true;
 }

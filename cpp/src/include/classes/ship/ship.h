@@ -5,14 +5,15 @@
 
 class Ship{
     public:
-        Ship(int init_x_cord, int init_y_cord, int direction, int length, Ocean& ocean);
+        Ship(int init_x_cord, int init_y_cord, Direction direction, int length, Ocean& ocean);
 
         int getLength();
-
-        Cell& getPiece(int piece);
+        bool getIsSunk();
+        Cell& getPiece(int index);
 
     private:
         int length_;
+        bool is_sunk_;
         std::vector<std::reference_wrapper<Cell>> ship_;
 };
 
