@@ -4,7 +4,10 @@
 
 enum ShipType{
     DESTROYER,
-    SUBMARINE
+    SUBMARINE,
+    CRUISER,
+    BATTLESHIP,
+    CARRIER
 };
 
 class Fleet{

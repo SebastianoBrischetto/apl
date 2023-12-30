@@ -51,6 +51,15 @@ Ship Fleet::createTypeOfShip(ShipType ship_type, Ocean& ocean){
         case SUBMARINE:
             return Submarine(x, y, direction, ocean);
             break;
+        case CRUISER:
+            return Cruiser(x, y, direction, ocean);
+            break;
+        case BATTLESHIP:
+            return Battleship(x, y, direction, ocean);
+            break;
+        case CARRIER:
+            return Carrier(x, y, direction, ocean);
+            break;
         default: 
             throw std::runtime_error("Type of ship not supported");
     }   

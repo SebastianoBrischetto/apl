@@ -2,6 +2,7 @@
 #include <ctime>
 #include "include/classes/fleet/fleet.h"
 #include "include/classes/random/random.h"
+#include "include/classes/hunt_&_target/hunt_&_target.h"
 
 void showCells(Ocean& ocean){
     for(int x = 0; x < ocean.getNumberOfColumns(); x++){
@@ -26,21 +27,14 @@ int main() {
     std::srand(static_cast<unsigned>(std::time(nullptr)));
 
 
-    int columns = 10, rows = 10, destroyers = 5, sumbarines = 3;
-    /*
-    std::cout << "Inserisci il numero di colonne" << std::endl;
-    std::cin >> columns;
-    std::cout << "Inserisci il numero di righe" << std::endl;
-    std::cin >> rows;
-    std::cout << "Inserisci il numero di navi destroyer" << std::endl;
-    std::cin >> destroyers;
-    std::cout << "Inserisci il numero di navi sumbarine" << std::endl;
-    std::cin >> sumbarines;
-    */
+    int columns = 10, rows = 10, destroyers = 1, sumbarines = 1, cruisers = 1, battleships = 1, carriers = 1;
     Ocean ocean = Ocean(columns, rows);
     Fleet fleet = Fleet(DESTROYER, destroyers, ocean);
     fleet.addToFleet(SUBMARINE, sumbarines, ocean);
-    Random bot = Random(ocean);
+    fleet.addToFleet(CRUISER, cruisers, ocean);
+    fleet.addToFleet(BATTLESHIP, battleships, ocean);
+    fleet.addToFleet(CARRIER, carriers, ocean);
+    HuntAndSearch bot = HuntAndSearch(ocean);
     bool game_over = false;
     int x;
     int y;
@@ -60,6 +54,9 @@ int main() {
         bot.doMove();
         std::system("sleep 0.1");
         game_over = fleet.getIsFleetDestroyed();
+        if((counter >= 120)){
+            break;
+        }
     };
     std::system("clear");
     showCells(ocean);
