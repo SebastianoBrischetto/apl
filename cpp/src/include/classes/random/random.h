@@ -1,3 +1,5 @@
+#ifndef RANDOM_H_
+#define RANDOM_H_
 #include "../bot_algorithm/bot_algorithm.h"
 
 class Random : public BotAlgorithm{
@@ -6,3 +8,5 @@ class Random : public BotAlgorithm{
         Random(Ocean& ocean);
         void doMove() override;
 };
+
+#endif

@@ -1,2 +1,5 @@
 #include "destroyer/destroyer.h"
 #include "submarine/submarine.h"
+#include "cruiser/cruiser.h"
+#include "battleship/battleship.h"
+#include "carrier/carrier.h"
