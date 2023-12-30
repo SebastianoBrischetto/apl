@@ -4,13 +4,13 @@
 #include <functional>
 #include "../bot_algorithm/bot_algorithm.h"
 
-class HuntAndSearch : public BotAlgorithm{
+class HuntAndTarget : public BotAlgorithm{
     public:
-        HuntAndSearch(Ocean& ocean);
+        HuntAndTarget(Ocean& ocean);
         void doMove() override;
         
-    private:
-        void hunt();
+    protected:
+        virtual void hunt();
         void hitAndCheck(int x, int y);
         void addToSearch(int x, int y);
         void search();

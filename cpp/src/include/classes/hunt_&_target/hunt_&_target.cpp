@@ -1,7 +1,7 @@
 #include "hunt_&_target.h"
 
-HuntAndSearch::HuntAndSearch(Ocean& ocean) : BotAlgorithm(ocean){}
-void HuntAndSearch::doMove(){
+HuntAndTarget::HuntAndTarget(Ocean& ocean) : BotAlgorithm(ocean){}
+void HuntAndTarget::doMove(){
     if(search_list_.size() == 0){
         hunt();
     }else{
@@ -9,7 +9,7 @@ void HuntAndSearch::doMove(){
     }
 }
 
-void HuntAndSearch::hunt(){
+void HuntAndTarget::hunt(){
     while(true){
         int x = rand()%columns_;
         int y = rand()%rows_;
@@ -20,7 +20,7 @@ void HuntAndSearch::hunt(){
     }
 }
 
-void HuntAndSearch::hitAndCheck(int x, int y){
+void HuntAndTarget::hitAndCheck(int x, int y){
     ocean_.getCell(x, y).setIsHit();
     if(ocean_.getCell(x,y).getIsOccupied()){
         addToSearch(x, y-1);    //UP
@@ -30,14 +30,14 @@ void HuntAndSearch::hitAndCheck(int x, int y){
     }
 }
 
-void HuntAndSearch::addToSearch(int x, int y){
+void HuntAndTarget::addToSearch(int x, int y){
     if((x < 0 || x >= columns_) || (y < 0 || y >= rows_) || ocean_.getCell(x, y).getIsHit()){
         return;
     }
     search_list_.push_back(ocean_.getCell(x, y));
 }
 
-void HuntAndSearch::search(){
+void HuntAndTarget::search(){
     if(!search_list_.front().get().getIsHit()){
         int x = search_list_.front().get().getXCord();
         int y = search_list_.front().get().getYCord();
