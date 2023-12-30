@@ -1,10 +1,9 @@
 #include "fleet.h"
 
-Fleet::Fleet(Ship& ship){
+Fleet::Fleet(Ship& ship): is_fleet_destroyed_(false){
     addToFleet(ship);
 }
-
-Fleet::Fleet(ShipType ship_type, int number_of_ships, Ocean& ocean){
+Fleet::Fleet(ShipType ship_type, int number_of_ships, Ocean& ocean): is_fleet_destroyed_(false){
     addToFleet(ship_type, number_of_ships, ocean);
 }
 
@@ -15,8 +14,10 @@ void Fleet::addToFleet(Ship& ship){
 
 void Fleet::addToFleet(ShipType ship_type, int number_of_ships, Ocean& ocean){
     is_fleet_destroyed_ = false;
-    for(int i=0; i<number_of_ships; i++){
+    for(int i=0; i < number_of_ships; i++){
         while(true){
+            //blocco try catch senza gestione dell'errore poiche i valori usati per inizializzare la nave vengono creati in modo casuale
+            //ed e necessario riprovare con altri valori finche la nave non viene creata
             try{
                 fleet_.push_back(createTypeOfShip(ship_type, ocean));
                 break;
@@ -39,13 +40,16 @@ Ship& Fleet::getShip(int index){
     return fleet_[index];
 }
 
-Ship Fleet::createTypeOfShip(ShipType type, Ocean& ocean){
-    switch(type){
+Ship Fleet::createTypeOfShip(ShipType ship_type, Ocean& ocean){
+    int x = rand()%ocean.getNumberOfColumns();
+    int y = rand()%ocean.getNumberOfRows();
+    Direction direction = static_cast<Direction>(std::rand()%4);
+    switch(ship_type){
         case DESTROYER:
-            return Destroyer(rand()%ocean.getNumberOfColumns(), rand()%ocean.getNumberOfRows(), static_cast<Direction>(std::rand()%4), ocean);
+            return Destroyer(x, y, direction, ocean);
             break;
         case SUBMARINE:
-            return Submarine(rand()%ocean.getNumberOfColumns(), rand()%ocean.getNumberOfRows(), static_cast<Direction>(std::rand()%4), ocean);
+            return Submarine(x, y, direction, ocean);
             break;
         default: 
             throw std::runtime_error("Type of ship not supported");

@@ -1,11 +1,11 @@
 #include "ship.h"
 
-Ship::Ship(int init_x_cord, int init_y_cord, Direction direction, int length, Ocean& ocean){
-    if(ocean.isSpaceOccupied(init_x_cord, init_y_cord, direction, length)){
+Ship::Ship(int init_x_cord, int init_y_cord, Direction direction, int length, Ocean& ocean) : length_(length), is_sunk_(false), ocean_(ocean){
+    if(ocean_.isSpaceOccupied(init_x_cord, init_y_cord, direction, length)){
         throw std::runtime_error("Space already occupied");
     }
-    length_ = length;
-    is_sunk_ = false;
+    //riserva direttamente tutto lo spazio necessario in memoria in modo da evitare l'overhead dovuto all'inserimento di elementi 
+    //(vector salva gli elementi in memoria contigua, quindi l'inserimento di nuovi elementi richiede di shiftare i bit)
     ship_.clear();
     ship_.reserve(length_);
     int x = init_x_cord;
@@ -37,7 +37,8 @@ int Ship::getLength(){
 bool Ship::getIsSunk(){
     is_sunk_ = true;
     for(int i = 0; i < length_; i++){
-        if(!getPiece(i).getIsHit()){  // almeno 1 pezzo a galla => nave viva
+        // almeno 1 pezzo a galla => nave viva
+        if(!getPiece(i).getIsHit()){ 
             is_sunk_ = false;
         }
     }
@@ -45,5 +46,8 @@ bool Ship::getIsSunk(){
 }
 
 Cell& Ship::getPiece(int index){
+    if(index >= getLength()){
+        throw std::runtime_error("Out of bounds");
+    }
     return ship_[index].get();
 }

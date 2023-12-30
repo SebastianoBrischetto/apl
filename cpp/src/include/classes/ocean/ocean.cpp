@@ -1,10 +1,9 @@
 #include "ocean.h"
 
-Ocean::Ocean(int columns, int rows){
-    columns_ = columns;
-    rows_ = rows;
+Ocean::Ocean(int columns, int rows) : columns_(columns), rows_(rows){
     int dimension = columns_* rows_;
-    //riserva solo lo spazio necessario in modo da evitare l'overhead dovuto all'inserimento di elementi oltre la dimensione attuale
+    //riserva direttamente tutto lo spazio necessario in memoria in modo da evitare l'overhead dovuto all'inserimento di elementi 
+    //(vector salva gli elementi in memoria contigua, quindi l'inserimento di nuovi elementi richiede di shiftare i bit)
     ocean_.clear();
     ocean_.reserve(dimension);
     for(int i = 0; i < dimension; i++){

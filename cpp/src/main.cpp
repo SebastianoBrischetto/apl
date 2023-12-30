@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include "include/classes/fleet/fleet.h"
+#include "include/classes/random/random.h"
 
 void showCells(Ocean& ocean){
     for(int x = 0; x < ocean.getNumberOfColumns(); x++){
@@ -39,6 +40,7 @@ int main() {
     Ocean ocean = Ocean(columns, rows);
     Fleet fleet = Fleet(DESTROYER, destroyers, ocean);
     fleet.addToFleet(SUBMARINE, sumbarines, ocean);
+    Random bot = Random(ocean);
     bool game_over = false;
     int x;
     int y;
@@ -48,20 +50,14 @@ int main() {
     while(!game_over){
         std::system("clear");
         showCells(ocean);
-        std::cout << "ROUND: " << counter << std::endl;
-        counter++;
+        std::cout << "ROUND: " << ++counter << std::endl;
         /*
         std::cout << std::endl << "Inserisci la coordinata x da colpire: ";
         std::cin >> x;
         std::cout << "Inserisci la coordinata y da colpire: ";
         std::cin >> y;
         */
-        while(true){
-            try{
-                ocean.getCell(rand()%columns,rand()%rows).setIsHit();
-                break;
-            }catch(const std::exception& e){};
-        }
+        bot.doMove();
         std::system("sleep 0.1");
         game_over = fleet.getIsFleetDestroyed();
     };
