@@ -3,6 +3,7 @@
 #include "include/classes/fleet/fleet.h"
 #include "include/classes/random/random.h"
 #include "include/classes/hunt_&_target/hunt_&_target.h"
+#include "include/classes/parity/parity.h"
 
 void showCells(Ocean& ocean){
     for(int x = 0; x < ocean.getNumberOfColumns(); x++){
@@ -34,7 +35,7 @@ int main() {
     fleet.addToFleet(CRUISER, cruisers, ocean);
     fleet.addToFleet(BATTLESHIP, battleships, ocean);
     fleet.addToFleet(CARRIER, carriers, ocean);
-    HuntAndSearch bot = HuntAndSearch(ocean);
+    Parity bot = Parity(ocean);
     bool game_over = false;
     int x;
     int y;
