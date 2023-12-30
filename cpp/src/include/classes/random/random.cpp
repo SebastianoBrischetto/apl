@@ -1,8 +1,6 @@
 #include "random.h"
 
-Random::Random(Ocean& ocean) : ocean_(ocean){  
-    columns_ = ocean_.getNumberOfColumns();
-    rows_ = ocean_.getNumberOfRows();
+Random::Random(Ocean& ocean) : BotAlgorithm(ocean){  
 }
 void Random::doMove(){
     while(true){

@@ -5,7 +5,7 @@ class BotAlgorithm{
         BotAlgorithm(Ocean& ocean);
         virtual void doMove() = 0;
 
-    private:
+    protected:
         int columns_;
         int rows_;
         Ocean& ocean_;
