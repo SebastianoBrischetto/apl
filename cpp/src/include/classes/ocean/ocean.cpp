@@ -1,29 +1,36 @@
 #include "ocean.h"
 
-enum direction{
-    HORIZONTAL,  //0
-    VERTICAL    //1
-};
-
-Ocean::Ocean(int columns, int rows){
-    columns_ = columns;
-    rows_ = rows;
-    dimension_ = columns_* rows_;
-    //riserva solo lo spazio necessario in modo da evitare l'overhead dovuto all'inserimento di elementi oltre la dimensione attuale
+Ocean::Ocean(int columns, int rows) : columns_(columns), rows_(rows){
+    int dimension = columns_* rows_;
+    //riserva direttamente tutto lo spazio necessario in memoria in modo da evitare l'overhead dovuto all'inserimento di elementi 
+    //(vector salva gli elementi in memoria contigua, quindi l'inserimento di nuovi elementi richiede di shiftare i bit)
     ocean_.clear();
-    ocean_.reserve(dimension_);
-    for(int i = 0; i < dimension_; i++){
-        ocean_.push_back(Cell(i%columns_,i/columns_));
+    ocean_.reserve(dimension);
+    for(int i = 0; i < dimension; i++){
+        ocean_.push_back(Cell(i%columns_, i/columns_));
     }
 }
 
-bool Ocean::isSpaceOccupied(int init_x_cord, int init_y_cord, int direction, int length){
+bool Ocean::isSpaceOccupied(int init_x_cord, int init_y_cord, Direction direction, int length){
+    int x = init_x_cord;
+    int y = init_y_cord;
     for(int i = 0; i < length; i++){
-        if(direction == HORIZONTAL && getCell(init_x_cord + i, init_y_cord).getIsOccupied()){
+        if(getCell(x, y).getIsOccupied()){
             return true;
         }
-        else if(direction == VERTICAL && getCell(init_x_cord, init_y_cord + i).getIsOccupied()){
-            return true;
+        switch(direction){
+            case UP:
+                y--;
+                break;
+            case RIGHT:
+                x++;
+                break;
+            case DOWN:
+                y++;
+                break;
+            case LEFT:
+                x--;
+                break;
         }
     }
     return false;
@@ -37,7 +44,7 @@ int Ocean::getNumberOfColumns(){
 }
 
 Cell& Ocean::getCell(int x, int y){
-    if(x >= columns_ || y >= rows_){
+    if((x < 0 || x >= columns_) || (y < 0 || y >= rows_)){
         throw std::runtime_error("Out of bounds");
     }
     return ocean_[x + y * columns_];

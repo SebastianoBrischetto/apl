@@ -4,7 +4,8 @@
 
 class Destroyer : public Ship {
     public:
-        Destroyer(int init_x_cord, int init_y_cord, int direction, Ocean& ocean);
+        //Costruttore distruttore eredita da ship
+        Destroyer(int init_x_cord, int init_y_cord, Direction direction, Ocean& ocean);
 };
 
 #endif
