@@ -35,17 +35,18 @@ int main() {
     fleet.addToFleet(CRUISER, cruisers, ocean);
     fleet.addToFleet(BATTLESHIP, battleships, ocean);
     fleet.addToFleet(CARRIER, carriers, ocean);
-    Parity bot = Parity(ocean);
+    Parity bot = Parity(ocean, fleet);
     bool game_over = false;
     int x;
     int y;
     int counter = 0;
     showCells(ocean);
     std::cout << "ROUND: " << counter << std::endl;
-    while(!game_over){
+    while(!fleet.getIsFleetDestroyed()){
         std::system("clear");
         showCells(ocean);
         std::cout << "ROUND: " << ++counter << std::endl;
+        std::cout << "Numero navi rimaste: " << fleet.getNumberOfShips() << std::endl;
         /*
         std::cout << std::endl << "Inserisci la coordinata x da colpire: ";
         std::cin >> x;
@@ -54,13 +55,13 @@ int main() {
         */
         bot.doMove();
         std::system("sleep 0.1");
-        game_over = fleet.getIsFleetDestroyed();
         if((counter >= 120)){
             break;
         }
     };
     std::system("clear");
     showCells(ocean);
-    std::cout << "ROUND: " << counter << std::endl;
+    std::cout << "ROUND: " << ++counter << std::endl;
+    std::cout << "Numero navi rimaste: " << fleet.getNumberOfShips() << std::endl;
     std::cout << "Partita finita" << std::endl;
 }

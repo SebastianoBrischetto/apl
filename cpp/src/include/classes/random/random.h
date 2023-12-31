@@ -5,7 +5,7 @@
 class Random : public BotAlgorithm{
 
     public:
-        Random(Ocean& ocean);
+        Random(Ocean& ocean, Fleet& fleet);
         void doMove() override;
 };
 

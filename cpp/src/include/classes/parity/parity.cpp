@@ -1,6 +1,6 @@
 #include "parity.h"
 
-Parity::Parity(Ocean& ocean) : HuntAndTarget(ocean){
+Parity::Parity(Ocean& ocean, Fleet& fleet) : HuntAndTarget(ocean, fleet){
 }
 
 void Parity::hunt(){
@@ -10,9 +10,9 @@ void Parity::hunt(){
         if((x & 1) != (y & 1)){     //se x e y hanno parita diversa (uno pari e uno dispari) incrementa di 1 y in modo da modificarne la parita
             y = (++y)%rows_;
         }
-        try{
-            hitAndCheck(x, y);
+        if(hitAndNotify(x,y)){
+            addCloseCells(x, y);
             break;
-        }catch(const std::exception& e){};
+        }
     }
 }

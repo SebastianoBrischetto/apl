@@ -4,7 +4,7 @@
 
 class Parity: public HuntAndTarget{
     public:
-        Parity(Ocean& ocean);
+        Parity(Ocean& ocean, Fleet& fleet);
         
     protected:
         void hunt() override;

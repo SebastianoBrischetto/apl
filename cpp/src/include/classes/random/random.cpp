@@ -1,12 +1,11 @@
 #include "random.h"
 
-Random::Random(Ocean& ocean) : BotAlgorithm(ocean){  
+Random::Random(Ocean& ocean, Fleet& fleet) : BotAlgorithm(ocean, fleet){  
 }
 void Random::doMove(){
     while(true){
-        try{
-            ocean_.getCell(rand()%columns_, rand()%rows_).setIsHit();
+        if(hitAndNotify(rand()%columns_, rand()%rows_)){
             break;
-        }catch(const std::exception& e){};
+        }
     }
 }

@@ -26,18 +26,24 @@ void Fleet::addToFleet(ShipType ship_type, int number_of_ships, Ocean& ocean){
     }
 }
 
-bool Fleet::getIsFleetDestroyed(){
+void Fleet::updateFleetStatus(){
     is_fleet_destroyed_ = true;
-    for(int i = 0; i < fleet_.size(); i++){
-        if(!fleet_[i].getIsSunk()){  // se almeno 1 nave a galla => flotta viva
+    for (std::list<Ship>::iterator it = fleet_.begin(); it != fleet_.end();) {
+        if(it->getIsSunk()){
+            it = fleet_.erase(it);
+        }else{
+            ++it;
             is_fleet_destroyed_ = false;
         }
     }
+}
+
+bool Fleet::getIsFleetDestroyed(){
     return is_fleet_destroyed_;
 }
 
-Ship& Fleet::getShip(int index){
-    return fleet_[index];
+int Fleet::getNumberOfShips(){
+    return fleet_.size();
 }
 
 Ship Fleet::createTypeOfShip(ShipType ship_type, Ocean& ocean){
