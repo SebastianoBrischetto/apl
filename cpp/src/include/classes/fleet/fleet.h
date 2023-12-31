@@ -1,5 +1,6 @@
 #ifndef FLEET_H_
 #define FLEET_H_
+#include <list>
 #include "../include_ships.h"
 
 enum ShipType{
@@ -48,14 +49,15 @@ class Fleet{
          */
         void addToFleet(ShipType ship_type, int number_of_ships, Ocean& ocean);
 
+        void updateFleetStatus();
         //Torna un bool che indica se la flotta e stata distrutta (true) o meno
         bool getIsFleetDestroyed();
-        //Torna il riferimento alla nave index-esima della flotta
-        Ship& getShip(int index);
+
+        int getNumberOfShips();
         
     private:
         bool is_fleet_destroyed_;
-        std::vector<Ship> fleet_;
+        std::list<Ship> fleet_;
 
         /**
          * Crea una nave del tipo richiesto con piazzamento casuale

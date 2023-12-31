@@ -6,15 +6,15 @@
 
 class HuntAndTarget : public BotAlgorithm{
     public:
-        HuntAndTarget(Ocean& ocean);
+        HuntAndTarget(Ocean& ocean, Fleet& fleet);
         void doMove() override;
         
     protected:
         virtual void hunt();
-        void hitAndCheck(int x, int y);
-        void addToSearch(int x, int y);
-        void search();
-        std::deque<std::reference_wrapper<Cell>> search_list_;
+        void addCloseCells(int x, int y);
+        void addToTargets(int x, int y);
+        void target();
+        std::deque<std::reference_wrapper<Cell>> target_list_;
 };
 
 #endif

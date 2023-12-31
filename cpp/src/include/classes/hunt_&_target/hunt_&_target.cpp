@@ -1,11 +1,11 @@
 #include "hunt_&_target.h"
 
-HuntAndTarget::HuntAndTarget(Ocean& ocean) : BotAlgorithm(ocean){}
+HuntAndTarget::HuntAndTarget(Ocean& ocean, Fleet& fleet) : BotAlgorithm(ocean, fleet){}
 void HuntAndTarget::doMove(){
-    if(search_list_.size() == 0){
+    if(target_list_.size() == 0){
         hunt();
     }else{
-        search();
+        target();
     }
 }
 
@@ -13,35 +13,37 @@ void HuntAndTarget::hunt(){
     while(true){
         int x = rand()%columns_;
         int y = rand()%rows_;
-        try{
-            hitAndCheck(x, y);
+        if(hitAndNotify(x,y)){
+            addCloseCells(x, y);
             break;
-        }catch(const std::exception& e){};
+        }
     }
 }
 
-void HuntAndTarget::hitAndCheck(int x, int y){
-    ocean_.getCell(x, y).setIsHit();
+void HuntAndTarget::addCloseCells(int x, int y){
     if(ocean_.getCell(x,y).getIsOccupied()){
-        addToSearch(x, y-1);    //UP
-        addToSearch(x+1, y);    //RIGHT
-        addToSearch(x, y+1);    //DOWN
-        addToSearch(x-1, y);    //LEFT
+        addToTargets(x, y-1);    //UP
+        addToTargets(x+1, y);    //RIGHT
+        addToTargets(x, y+1);    //DOWN
+        addToTargets(x-1, y);    //LEFT
     }
 }
 
-void HuntAndTarget::addToSearch(int x, int y){
+void HuntAndTarget::addToTargets(int x, int y){
     if((x < 0 || x >= columns_) || (y < 0 || y >= rows_) || ocean_.getCell(x, y).getIsHit()){
         return;
     }
-    search_list_.push_back(ocean_.getCell(x, y));
+    target_list_.push_back(ocean_.getCell(x, y));
 }
 
-void HuntAndTarget::search(){
-    if(!search_list_.front().get().getIsHit()){
-        int x = search_list_.front().get().getXCord();
-        int y = search_list_.front().get().getYCord();
-        hitAndCheck(x, y);
+void HuntAndTarget::target(){
+    if(!target_list_.front().get().getIsHit()){
+        int x = target_list_.front().get().getXCord();
+        int y = target_list_.front().get().getYCord();
+        if(hitAndNotify(x,y)){
+            addCloseCells(x, y);
+        }
+        
     }
-    search_list_.pop_front();
+    target_list_.pop_front();
 }
