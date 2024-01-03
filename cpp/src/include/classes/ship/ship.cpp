@@ -16,7 +16,7 @@ Ship::Ship(int init_x_cord, int init_y_cord, Direction direction, int length, Oc
         //emplace_back inizializza e carica dentro il vettore l'oggetto (non viene creato un oggetto temporaneo)
         ship_.emplace_back(ocean.getCell(x, y));
         getPiece(i).setIsOccupied();
-        Ocean::updateCoords(x, y, x, y, 1, direction);
+        Ocean::updateCoordinates(x, y, x, y, 1, direction);
     }
 }
 
