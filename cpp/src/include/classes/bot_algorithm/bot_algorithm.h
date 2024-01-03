@@ -5,9 +5,9 @@
 
 /**
  * @class BotAlgorithm
- * @brief Classe astratta per il bot di battaglia navale.
+ * @brief Classe astratta per il bot di Battaglia Navale.
  */
-class BotAlgorithm{
+class BotAlgorithm {
 
 public:
     /**
@@ -19,7 +19,7 @@ public:
     BotAlgorithm(Ocean& ocean, Fleet& fleet);
 
     /**
-     * @brief Methodo astratto per permettere al bot di effettuare un'azione.
+     * @brief Metodo astratto per permettere al bot di effettuare un'azione.
      */
     virtual void doMove() = 0;
 
@@ -29,18 +29,18 @@ public:
     int getCounter();
 
     /**
-     * @brief Effettua un attacco alle cordinate passate e notifica la flotta nemica di aggiornare il proprio stato.
+     * @brief Effettua un attacco alle coordinate passate e notifica la flotta nemica di aggiornare il proprio stato.
      * 
-     * @param x Cordinata x del colpo.
-     * @param y Cordinata y del colpo.
+     * @param x Coordinata x del colpo.
+     * @param y Coordinata y del colpo.
      * 
      * @return True se il colpo ha avuto successo, false in caso contrario.
      */
     bool hitAndNotify(int x, int y);
 
 protected:
-    int columns_;   ///< Numero di colonne della griglia nemica
-    int rows_;      ///< Numero di righe della griglia nemica
+    int columns_;   ///< Numero di colonne della griglia nemica.
+    int rows_;      ///< Numero di righe della griglia nemica.
     int counter_;   ///< Numero di mosse effettuate dal bot.
     Ocean& ocean_;  ///< Riferimento all'oceano nemico.
     Fleet& fleet_;  ///< Riferimento alla flotta nemica.
