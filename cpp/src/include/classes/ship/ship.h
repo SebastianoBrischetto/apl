@@ -5,60 +5,60 @@
 #include "../ocean/ocean.h"
 
 /**
- * @class Ocean
+ * @class Ship
  * @brief Rappresenta una nave all'interno della griglia.
  */
-class Ship{
+class Ship {
 
 public:
     /**
-     * Costruttore della nave generica.
+     * @brief Costruttore per la nave generica.
      * 
-     * Inizializza un oggetto nave composta da "length" celle con la prima cella di posizione {init_x_cord, init_y_cord}
-     * e le rimanenti in base alla direzione scelta, le celle vengono settate come occupate.
+     * Inizializza un oggetto nave composta da "length" celle con la prima cella in posizione {init_x_coord, init_y_coord}
+     * e le restanti in base alla direzione scelta; le celle vengono impostate come occupate.
      * 
-     * @param init_x_cord coordinata x della prima cella
-     * @param init_y_cord coordinata y della prima cella
-     * @param direction direzione verso la quale la nave verra piazzata
-     * @param length numero di celle di cui e composta la nave
-     * @param ocean riferimento all'oceano alla quale la nave verra associata
+     * @param init_x_coord Coordinata X della prima cella.
+     * @param init_y_coord Coordinata Y della prima cella.
+     * @param direction Direzione nella quale verrà posizionata la nave.
+     * @param length Numero di celle che compongono la nave.
+     * @param ocean Riferimento all'oceano a cui verrà associata la nave.
      * 
-     * @throw std::runtime_error se l'area della griglia dove si vuole piazzare la nave e gia occupata
+     * @throw std::runtime_error Se l'area della griglia dove si vuole piazzare la nave è già occupata.
      */
-    Ship(int init_x_cord, int init_y_cord, Direction direction, int length, Ocean& ocean);
+    Ship(int init_x_coord, int init_y_coord, Direction direction, int length, Ocean& ocean);
 
     /**
-     * Costruttore default
+     * @brief Costruttore di default.
      */
     Ship(Ocean& ocean);
 
     /**
-     * @brief Torna il numero di celle che formano la nave.
+     * @brief Ottieni il numero di celle che compongono la nave.
      * 
      * @return Numero di celle che compongono la nave.
      */
     int getLength() const;
 
-        /**
-     * @brief Torna il riferimento all'oceano dove si trova la nave.
+    /**
+     * @brief Ottieni il riferimento all'oceano in cui si trova la nave.
      * 
      * @return Riferimento all'oggetto ocean.
      */
     Ocean& getOcean() const;
-    
-    /**
-     * Torna il riferimento alla cella index-esima che forma la nave
-     * 
-     * @param index indice alla cella della nave alla quale si vuole accedere
-     * 
-     * @throw std::runtime_error se si prova ad accedere ad una cella non associata alla nave
-     */
-    Cell& getPiece(int index) const;
 
     /**
-     * @brief Torna un booleano che indica se la nave è stata affondata o meno.
+     * @brief Ottieni il riferimento alla cella in posizione index della nave.
      * 
-     * @return True se la nave è affondata, False in caso contrario.
+     * @param index Indice della cella della nave alla quale si vuole accedere
+     * 
+     * @throw std::runtime_error Se si prova ad accedere a una cella non associata alla nave.
+     */
+    Cell& getShipPiece(int index) const;
+
+    /**
+     * @brief Verifica se la nave è affondata.
+     * 
+     * @return True se la nave è affondata, False altrimenti.
      */
     bool isShipSunk();
 
@@ -69,9 +69,8 @@ public:
      */
     Ship& operator=(const Ship& original);
 
-
 private:
-    int length_;                                        ///< Numero di celle che formano la nave.
+    int length_;                                        ///< Numero di celle che compongono la nave.
     Ocean& ocean_;                                      ///< Riferimento all'oceano associato alla nave.
     std::vector<std::reference_wrapper<Cell>> ship_;    ///< Vettore di celle che compongono la nave.
 };

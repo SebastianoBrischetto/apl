@@ -51,7 +51,7 @@ void Probability::emptyTargetList(){
             int x = target_list_[i].get().getXCoord();
             int y = target_list_[i].get().getYCoord();
             for(int j = 0 ; j < num_of_pieces; ++j){
-                if(x == last_sunk_ship.getPiece(j).getXCoord() && y == last_sunk_ship.getPiece(j).getYCoord()){
+                if(x == last_sunk_ship.getShipPiece(j).getXCoord() && y == last_sunk_ship.getShipPiece(j).getYCoord()){
                     std::deque<std::reference_wrapper<Cell>>::iterator it = target_list_.begin() + i;
                     target_list_.erase(it);
                 }
