@@ -14,14 +14,13 @@ int BotAlgorithm::getCounter() {
 }
 
 bool BotAlgorithm::hitAndNotify(int x, int y) {
-    try {
-        Cell& cell = ocean_.getCell(x, y);
-        cell.setIsHit();
-        if (cell.getIsOccupied()) {
-            fleet_.updateFleetNumbersOnHit();
-        }
-    } catch (const std::exception&) {
+    Cell& cell = ocean_.getCell(x, y);
+    if(cell.getIsHit()){
         return false;
+    }
+    cell.setIsHit();
+    if (cell.getIsOccupied()) {
+        fleet_.updateFleetNumbersOnHit();
     }
     return true;
 }

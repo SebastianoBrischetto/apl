@@ -7,7 +7,7 @@
  * @class Random
  * @brief Bot con mosse casuali.
  */
-class Random : public BotAlgorithm{
+class Random : public BotAlgorithm {
 
 public:
     /**
@@ -19,7 +19,7 @@ public:
     Random(Ocean& ocean, Fleet& fleet);
 
     /**
-     * @brief esegue la strategia del bot (colpisce casualmente).
+     * @brief Esegue la strategia del bot (colpisce casualmente).
      */
     void doMove() override;
 
