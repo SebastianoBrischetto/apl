@@ -92,7 +92,7 @@ int main() {
         std::cout << " - " << "Submarines & Cruisers: " << fleet.getNumberOfSubmarinesAndCruisers() << std::endl;
         std::cout << " - " << "Battleships: " << fleet.getNumberOfBattleships() << std::endl;
         std::cout << " - " << "Carriers: " << fleet.getNumberOfCarriers() << std::endl;
-        std::cout << "cella con probabilita max: {" << ocean.getMaxProbabilityCell().getXCord() << "," << ocean.getMaxProbabilityCell().getYCord() << "}" << std::endl;
+        std::cout << "cella con probabilita max: {" << ocean.getMaxProbabilityCell().getXCoord() << "," << ocean.getMaxProbabilityCell().getYCoord() << "}" << std::endl;
         std::cout << "Numero partite: " << num_games << std::endl;
         std::cout << "Media round: " << current_average_rounds << std::endl;
         if((bot.getCounter() >= 100)){ break; }

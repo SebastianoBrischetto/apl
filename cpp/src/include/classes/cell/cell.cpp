@@ -1,23 +1,33 @@
 #include "cell.h"
 
-Cell::Cell(int init_x_cord, int init_y_cord) :
-    x_cord_(init_x_cord),
-    y_cord_(init_y_cord),
+Cell::Cell(int init_x_coord, int init_y_coord) :
+    x_coord_(init_x_coord),
+    y_coord_(init_y_coord),
     is_hit_(false),
     is_occupied_(false),
     occupied_probability_(0)
 {
 }
 
-int Cell::getXCord() const { return x_cord_; }
+int Cell::getXCoord() const {
+    return x_coord_;
+}
 
-int Cell::getYCord() const { return y_cord_; }
+int Cell::getYCoord() const {
+    return y_coord_;
+}
 
-bool Cell::getIsHit() const { return is_hit_; }
+bool Cell::getIsHit() const {
+    return is_hit_;
+}
 
-bool Cell::getIsOccupied() const { return is_occupied_; }
+bool Cell::getIsOccupied() const {
+    return is_occupied_;
+}
 
-int Cell::getOccupiedProbability() const { return occupied_probability_; }
+int Cell::getOccupiedProbability() const {
+    return occupied_probability_;
+}
 
 void Cell::setIsHit() {
     if (is_hit_) {
@@ -33,6 +43,10 @@ void Cell::setIsOccupied() {
     is_occupied_ = true;
 }
 
-void Cell::increaseOccupiedProbability(int n) { occupied_probability_ += n; }
+void Cell::increaseOccupiedProbability(int n) {
+    occupied_probability_ += n;
+}
 
-void Cell::resetOccupiedProbability() { occupied_probability_ = 0; }
+void Cell::resetOccupiedProbability() {
+    occupied_probability_ = 0;
+}

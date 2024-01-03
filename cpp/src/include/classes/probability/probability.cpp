@@ -7,8 +7,8 @@ Probability::Probability(Ocean& ocean, Fleet& fleet) : HuntAndTarget(ocean, flee
 void Probability::hunt(){
     ocean_.calcOceanProbability(fleet_.getNumberOfDestroyers(), fleet_.getNumberOfSubmarinesAndCruisers(), fleet_.getNumberOfBattleships(), fleet_.getNumberOfCarriers());
     Cell& cell = ocean_.getMaxProbabilityCell();
-    int x = cell.getXCord();
-    int y = cell.getYCord();
+    int x = cell.getXCoord();
+    int y = cell.getYCoord();
     if(hitAndNotify(x,y) && cell.getIsOccupied()){
         addToTargets(x, y);
     }
@@ -20,8 +20,8 @@ void Probability::addToTargets(int x, int y){
 
 void Probability::target(){
     Cell& current_target = target_list_.back().get();
-    int current_x = current_target.getXCord();
-    int current_y = current_target.getYCord();
+    int current_x = current_target.getXCoord();
+    int current_y = current_target.getYCoord();
     int horizontal_bonus = 0;
     int vertical_bonus = 0;
     
@@ -34,8 +34,8 @@ void Probability::target(){
                                     vertical_bonus, horizontal_bonus);
 
     int target_x, target_y;
-    target_x = ocean_.getMaxProbabilityCell().getXCord();
-    target_y = ocean_.getMaxProbabilityCell().getYCord();
+    target_x = ocean_.getMaxProbabilityCell().getXCoord();
+    target_y = ocean_.getMaxProbabilityCell().getYCoord();
     if(hitAndNotify(target_x, target_y) && ocean_.getCell(target_x, target_y).getIsOccupied()){
         addToTargets(target_x, target_y);
     }
@@ -48,10 +48,10 @@ void Probability::emptyTargetList(){
         Ship& last_sunk_ship = fleet_.getLastSunkShip();
         int num_of_pieces = last_sunk_ship.getLength();
         for( int i = target_list_.size() - 1; i >= 0; --i){
-            int x = target_list_[i].get().getXCord();
-            int y = target_list_[i].get().getYCord();
+            int x = target_list_[i].get().getXCoord();
+            int y = target_list_[i].get().getYCoord();
             for(int j = 0 ; j < num_of_pieces; ++j){
-                if(x == last_sunk_ship.getPiece(j).getXCord() && y == last_sunk_ship.getPiece(j).getYCord()){
+                if(x == last_sunk_ship.getPiece(j).getXCoord() && y == last_sunk_ship.getPiece(j).getYCoord()){
                     std::deque<std::reference_wrapper<Cell>>::iterator it = target_list_.begin() + i;
                     target_list_.erase(it);
                 }
@@ -61,7 +61,7 @@ void Probability::emptyTargetList(){
 }
 
 bool Probability::isPrevTargetHorizontal(){
-    if(target_list_[target_list_.size() - 2].get().getXCord() != target_list_.back().get().getXCord()){
+    if(target_list_[target_list_.size() - 2].get().getXCoord() != target_list_.back().get().getXCoord()){
         return true;
     }
     return false;

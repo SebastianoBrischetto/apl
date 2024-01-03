@@ -92,8 +92,8 @@ void Ocean::updateCoords(int x_init_value, int y_init_value, int& x_reference, i
 void Ocean::calcOceanProbability(int destroyers, int submariness_and_cruisers, int battleships, int carriers) {
     cleanOceanProbability();
     for (Cell& cell : ocean_) {
-        int x = cell.getXCord();
-        int y = cell.getYCord();
+        int x = cell.getXCoord();
+        int y = cell.getYCoord();
         calcDirectionProbability(x, y, RIGHT, destroyers, submariness_and_cruisers, battleships, carriers);
         calcDirectionProbability(x, y, DOWN, destroyers, submariness_and_cruisers, battleships, carriers);
     }

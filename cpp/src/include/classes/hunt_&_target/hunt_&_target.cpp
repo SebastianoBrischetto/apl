@@ -42,8 +42,8 @@ void HuntAndTarget::addToTargets(int x, int y){
 
 void HuntAndTarget::target(){
     if(!target_list_.front().get().getIsHit()){
-        int x = target_list_.front().get().getXCord();
-        int y = target_list_.front().get().getYCord();
+        int x = target_list_.front().get().getXCoord();
+        int y = target_list_.front().get().getYCoord();
         if(hitAndNotify(x,y)){
             addCloseCells(x, y);
         }
