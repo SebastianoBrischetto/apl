@@ -2,7 +2,7 @@
 #define SHIP_H_
 
 #include <functional>
-#include "../ocean/ocean.h"
+#include "../../ocean/ocean.h"
 
 /**
  * @class Ship

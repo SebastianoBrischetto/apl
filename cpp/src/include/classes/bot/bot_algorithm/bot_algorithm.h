@@ -1,7 +1,7 @@
 #ifndef BOT_ALGORITHM_H_
 #define BOT_ALGORITHM_H_
 
-#include "../fleet/fleet.h"
+#include "../../game_elements/include_game_elements.h"
 
 /**
  * @class BotAlgorithm
