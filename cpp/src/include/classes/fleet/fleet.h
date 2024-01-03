@@ -4,7 +4,7 @@
 #include <list>
 #include "../include_ships.h"
 
-//Tipi di nave
+// Tipi di nave
 enum ShipType{
     DESTROYER = 2,  ///< Nave di lunghezza 2.
     SUBMARINE = 3,  ///< Nave di lunghezza 3.
@@ -15,41 +15,40 @@ enum ShipType{
 
 /**
  * @class Fleet
- * 
  * @brief Rappresenta un gruppo di navi.
  */
 class Fleet{
 
 public:
     /**
-     * @brief Costruttore della flotta del player con nave gia esistente.
+     * @brief Costruttore della flotta del giocatore con nave già esistente.
      * 
-     * @param ship riferimento a una nave gia esistente
+     * @param ship Riferimento a una nave già esistente.
      */
     Fleet(Ship& ship);
 
     /**
-     * @brief Costruttore della flotta del player con navi di un determinato tipo piazzate in modo casuale.
+     * @brief Costruttore della flotta del giocatore con navi di un determinato tipo piazzate in modo casuale.
      * 
-     * @param ship_type tipo delle navi che devono essere create
-     * @param number_of_ships numero di navi da creare
-     * @param ocean riferimento all'oceano nella quale le navi veranno piazzate
+     * @param ship_type Tipo delle navi che devono essere create.
+     * @param number_of_ships Numero di navi da creare.
+     * @param ocean Riferimento all'oceano nella quale le navi verranno piazzate.
      */
     Fleet(ShipType ship_type, int number_of_ships, Ocean& ocean);
 
     /**
-     * @brief Aggiunge navi gia create alla flotta
+     * @brief Aggiunge navi già create alla flotta.
      * 
-     * @param ship nave da aggiungere
+     * @param ship Nave da aggiungere.
      */
     void addToFleet(Ship& ship);
 
     /**
-     * Aggiunge navi di un determinate tipo alla flotta piazzate in modo casuale
+     * @brief Aggiunge navi di un determinato tipo alla flotta piazzate in modo casuale.
      * 
-     * @param ship_type tipo delle navi che devono essere create
-     * @param number_of_ships numero di navi da creare
-     * @param ocean riferimento all'oceano nella quale le navi veranno piazzate
+     * @param ship_type Tipo delle navi che devono essere create.
+     * @param number_of_ships Numero di navi da creare.
+     * @param ocean Riferimento all'oceano nella quale le navi verranno piazzate.
      */
     void addToFleet(ShipType ship_type, int number_of_ships, Ocean& ocean);
 
@@ -89,47 +88,48 @@ public:
     int getNumberOfCarriers();
 
     /**
-     * @brief Ritorna la lunghezza dell'ultima nave distrutta.
+     * @brief Ritorna la copia dell'ultima nave distrutta.
      * 
-     * @return Lunghezza (num celle) dell'ultima nave distrutta.
+     * @return Riferimento all'ultima nave distrutta.
      */
     Ship& getLastSunkShip();
 
     /**
-     * @brief Controlla se la flotta e stata completamente distrutta.
+     * @brief Controlla se la flotta è stata completamente distrutta.
      * 
-     * @return True se la flotta e stata distrutta, false in caso contrario.
+     * @return True se la flotta è stata distrutta, false in caso contrario.
      */
     bool getIsFleetDestroyed();
 
     /**
-     * @brief aggiorna il numero di navi della flotta con la nave passata.
+     * @brief Aggiorna il numero di navi della flotta in base al tipo della nave.
      * 
-     * @param ship riferimento alla nave che sta venendo aggiunta
+     * @param ship Riferimento alla nave che sta venendo aggiunta.
+     * @param value Valore da aggiungere o sottrarre al numero di navi.
      */
     void updateFleetNumbers(Ship& ship, int value);
 
     /**
-     * @brief aggiorna il numero di navi presenti nella flotta quando viene colpita una nave.
+     * @brief Aggiorna il numero di navi presenti nella flotta quando viene colpita una nave.
      */
     void updateFleetNumbersOnHit();
 
 private:
-    int destroyers_, submarines_and_cruisers_, battleships_, carriers_; ///< Numero dei vari tipi di nave.
-    std::list<Ship> fleet_;                                             ///< Lista di navi che compongono la flotta.
-    Ship last_sunk_ship_;                                                ///< Copia dell'ultima nave affondata
-
     /**
-     * @brief Crea una nave del tipo richiesto con piazzamento casuale
+     * @brief Crea una nave del tipo richiesto con piazzamento casuale.
      * 
-     * @param ship_type tipo delle nave che deve essere creata
-     * @param ocean riferimento all'oceano nella quale la nave verra piazzata
+     * @param ship_type Tipo delle nave che deve essere creata.
+     * @param ocean Riferimento all'oceano nella quale la nave verrà piazzata.
      * 
-     * @return il riferimento alla nave creata
+     * @return Il riferimento alla nave creata.
      * 
-     * @throw std::runtime_error se si prova a creare una nave non supportata
+     * @throw std::runtime_error Se si prova a creare una nave non supportata.
      */
     Ship createTypeOfShip(ShipType ship_type, Ocean& ocean);
+    
+    int destroyers_, submarines_and_cruisers_, battleships_, carriers_; ///< Numero dei vari tipi di nave.
+    std::list<Ship> fleet_;                                             ///< Lista di navi che compongono la flotta.
+    Ship last_sunk_ship_;                                               ///< Copia dell'ultima nave affondata
 };
 
 #endif

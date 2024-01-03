@@ -21,11 +21,16 @@ Ship::Ship(int init_x_cord, int init_y_cord, Direction direction, int length, Oc
     }
 }
 
-Ship::Ship(Ocean& ocean) : ocean_(ocean) {}
+Ship::Ship(Ocean& ocean) : ocean_(ocean) {
+}
 
-int Ship::getLength() const { return length_; }
+int Ship::getLength() const { 
+    return length_; 
+}
 
-Ocean& Ship::getOcean() const { return ocean_; }
+Ocean& Ship::getOcean() const { 
+    return ocean_; 
+}
 
 Cell& Ship::getShipPiece(int index) const {
     if(index >= getLength()){
