@@ -1,12 +1,12 @@
 #include "cell.h"
 
 Cell::Cell(int init_x_cord, int init_y_cord) :
-    x_cord_(init_x_cord), 
-    y_cord_(init_y_cord), 
-    is_hit_(false), 
-    is_occupied_(false), 
+    x_cord_(init_x_cord),
+    y_cord_(init_y_cord),
+    is_hit_(false),
+    is_occupied_(false),
     occupied_probability_(0)
-    {
+{
 }
 
 int Cell::getXCord() const { return x_cord_; }
@@ -20,19 +20,19 @@ bool Cell::getIsOccupied() const { return is_occupied_; }
 int Cell::getOccupiedProbability() const { return occupied_probability_; }
 
 void Cell::setIsHit() {
-    if(is_hit_){
-        throw std::runtime_error("Space already hit");
+    if (is_hit_) {
+        throw std::runtime_error("Cella già colpita");
     }
     is_hit_ = true;
 }
 
 void Cell::setIsOccupied() {
-    if(is_occupied_){
-        throw std::runtime_error("Space already occupied");
+    if (is_occupied_) {
+        throw std::runtime_error("Cella già occupata");
     }
     is_occupied_ = true;
 }
 
-void Cell::incraseOccupiedProbability(int n){ occupied_probability_ += n; }
+void Cell::increaseOccupiedProbability(int n) { occupied_probability_ += n; }
 
-void Cell::resetOccupiedProbability(){ occupied_probability_ = 0; }
+void Cell::resetOccupiedProbability() { occupied_probability_ = 0; }

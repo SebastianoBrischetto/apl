@@ -5,11 +5,10 @@
 
 /**
  * @class Cell
- * @brief Rappresenta una cella nella griglia(ocean).
+ * @brief Rappresenta una cella nella griglia (ocean).
  */
 
-class Cell{
-
+class Cell {
 public:
     /**
      * @brief Inizializza un oggetto cella con le coordinate {x, y} e setta is_hit_ e is_occupied a false
@@ -34,58 +33,58 @@ public:
     int getYCord() const;
 
     /**
-     * @brief Ritorna un booleano che indica se la cella e stata colpita o meno.
+     * @brief Ritorna un booleano che indica se la cella è stata colpita o meno.
      * 
-     * @return True se la cella e colpita, False in caso contrario.
+     * @return True se la cella è colpita, False in caso contrario.
      */
     bool getIsHit() const;
 
     /**
      * @brief Ritorna un booleano che indica se la cella risulta occupata.
      * 
-     * @return True se la cella e occupata, False in caso contrario.
+     * @return True se la cella è occupata, False in caso contrario.
      */
     bool getIsOccupied() const;
 
     /**
-     * @brief Ritorna la probabilita che la cella risulti occupata.
+     * @brief Ritorna la probabilità che la cella risulti occupata.
      * 
-     * @return Probabilita.
+     * @return Probabilità.
      */
     int getOccupiedProbability() const;
 
     /**
      * @brief Setta lo stato della cella a colpito.
      * 
-     * @throw std::runtime_error se la cella e gia stata colpita.
+     * @throw std::runtime_error se la cella è già stata colpita.
      */
     void setIsHit();
 
     /**
      * @brief Setta lo stato della cella a occupato.
      * 
-     * @throw std::runtime_error se la cella e gia occupata.
+     * @throw std::runtime_error se la cella è già occupata.
      */
     void setIsOccupied();
 
     /**
-     * @brief Aumenta la probabilita della cella di una determinata quantita.
+     * @brief Aumenta la probabilità della cella di una determinata quantità.
      * 
-     * @param n Quantita dell'aumento.
+     * @param n Quantità dell'aumento.
      */
-    void incraseOccupiedProbability(int n);
+    void increaseOccupiedProbability(int n);
 
     /**
-     * @brief Resetta la probabilita della cella a 0.
+     * @brief Resetta la probabilità della cella a 0.
      */
     void resetOccupiedProbability();
 
 private:
     int x_cord_;                ///< coordinata x della cella.
     int y_cord_;                ///< coordinata y della cella.
-    bool is_hit_;               ///< indica se la cella e stata colpita.
-    bool is_occupied_;          ///< indica se la cella e occupata.
-    int occupied_probability_;  ///< probabilita che la cella risulta occupata.
+    bool is_hit_;               ///< indica se la cella è stata colpita.
+    bool is_occupied_;          ///< indica se la cella è occupata.
+    int occupied_probability_;  ///< probabilità che la cella risulti occupata.
 };
 
 #endif

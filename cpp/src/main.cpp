@@ -68,7 +68,7 @@ int main() {
     fleet.addToFleet(CARRIER, carriers, ocean);
 
     //bot
-    Random bot(ocean, fleet);
+    Probability bot(ocean, fleet);
 
     //game status
     bool game_over = false; 
