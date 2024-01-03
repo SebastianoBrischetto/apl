@@ -85,6 +85,7 @@ int main() {
         */
 
         std::system("clear");
+        /*
         showCells(ocean);
         std::cout << "ROUND: " << bot.getCounter() << std::endl;
         std::cout << "Numero navi rimaste: " << std::endl;
@@ -93,11 +94,12 @@ int main() {
         std::cout << " - " << "Battleships: " << fleet.getNumberOfBattleships() << std::endl;
         std::cout << " - " << "Carriers: " << fleet.getNumberOfCarriers() << std::endl;
         std::cout << "cella con probabilita max: {" << ocean.getMaxProbabilityCell().getXCoord() << "," << ocean.getMaxProbabilityCell().getYCoord() << "}" << std::endl;
+        */
         std::cout << "Numero partite: " << num_games << std::endl;
         std::cout << "Media round: " << current_average_rounds << std::endl;
         if((bot.getCounter() >= 100)){ break; }
 
-        //std::system("sleep 0.05");
+        //std::system("sleep 0.01");
         //std::cout << "Press any button to do next move";
         //std::cin.ignore();
     };

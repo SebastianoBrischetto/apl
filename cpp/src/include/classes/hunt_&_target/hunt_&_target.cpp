@@ -8,10 +8,8 @@ void HuntAndTarget::doMove() {
     if (counter_ >= columns_ * rows_) {
         return;
     }
-    if (target_list_.empty()) {
+    if (target_list_.empty() || !target()) {
         hunt();
-    } else {
-        target();
     }
     counter_++;
 }
@@ -44,17 +42,19 @@ void HuntAndTarget::addToTargets(int x, int y) {
     }
 }
 
-void HuntAndTarget::target() {
-    while(true){
+bool HuntAndTarget::target() {
+    bool target_is_hit = false;
+    while(!target_is_hit && !target_list_.empty()){
         Cell& last_target = target_list_.front().get();
-        target_list_.pop_front();
         if (!last_target.getIsHit()) {
             int x = last_target.getXCoord();
             int y = last_target.getYCoord();
             if (hitAndNotify(x, y)) {
                 addCloseCells(x, y);
             }
-            break;
+            target_is_hit = true;
         }
+        target_list_.pop_front();
     }
+    return target_is_hit;
 }

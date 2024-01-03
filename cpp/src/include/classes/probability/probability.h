@@ -5,11 +5,11 @@
 #include "../hunt_&_target/hunt_&_target.h"
 
 /**
- * @class Parity
- * @brief Algoritmo che nella fase di hunt calcola la probabilita che una cella sia occupata dato lo stato della griglia e colpisce la cella con la probabilita maggiore,
- * mentre nella fase di target calcola la probabilita delle celle adiacenti al target e colpisce quella piu probabile.
+ * @class Probability
+ * @brief Algoritmo che, nella fase di hunt, calcola la probabilità che una cella sia occupata dato lo stato della griglia e colpisce la cella con la probabilità maggiore.
+ * Nella fase di target, calcola la probabilità delle celle adiacenti al target e colpisce quella più probabile.
  */
-class Probability: public HuntAndTarget{
+class Probability : public HuntAndTarget {
 
 public:
     /**
@@ -22,28 +22,30 @@ public:
     
 protected:
     /**
-     * @brief Esegue la fase di caccia della strategia (colpisce la cella con la probabilita di essere occupata maggiore).
+     * @brief Esegue la fase di caccia della strategia (colpisce la cella con la probabilità di essere occupata maggiore).
      */
     void hunt() override;
 
     /**
-     * @brief Esegue la fase di targeting calcolando la probabilita delle celle adiacenti al target.
+     * @brief Esegue la fase di targeting calcolando la probabilità delle celle adiacenti al target.
+     * 
+     * @return True se ha colpito un bersaglio presente nella lista, False se la lista non contiene bersagli validi.
      */
-    void target() override;
+    bool target() override;
 
     /**
      * @brief Aggiunge la cella con le coordinate x,y alla lista dei bersagli.
      * 
-     * @param x cordinata x della cella.
-     * @param y cordinata y della cella.
+     * @param x Coordinata x della cella.
+     * @param y Coordinata y della cella.
      */
     void addToTargets(int x, int y) override;
-private:
 
+private:
     /**
-     * @brief Individua se il bersaglio precedente sia orizzontale o verticale rispetto a quello attuale.
+     * @brief Individua se il bersaglio precedente risulta orizzontale o verticale rispetto a quello attuale.
      * 
-     * @return True se orizzontale, false se verticale
+     * @return True se orizzontale, false se verticale.
      */
     bool isPrevTargetHorizontal();
 
@@ -52,7 +54,7 @@ private:
      */
     void emptyTargetList();
 
-    int number_of_ships_;   ///< Numero di navi della flotta
+    int number_of_ships_;   ///< Numero di navi della flotta.
 };
 
 #endif

@@ -49,8 +49,10 @@ protected:
 
     /**
      * @brief Esegue la fase di mira della strategia (colpisce celle presenti nella lista dei bersagli).
+     * 
+     * @return True se ha colpito un bersaglio dalla lista, False se la lista non contiene bersagli validi.
      */
-    virtual void target();
+    virtual bool target();
 
     std::deque<std::reference_wrapper<Cell>> target_list_;  ///< Lista dei bersagli.
 };
