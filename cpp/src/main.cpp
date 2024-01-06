@@ -1,4 +1,8 @@
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <chrono>
+#include <thread>
 #include <ctime>
 #include "include/classes/game_elements/include_game_elements.h"
 #include "include/classes/bot/include_bots.h"
@@ -54,7 +58,41 @@ void showCells(Ocean& ocean){
     }
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        std::cerr << "Usage: " << argv[0] << " <named_pipe_file>" << std::endl;
+        return 1;
+    }
+
+    const std::string pipeGo = argv[1];
+    const std::string pipeCpp = argv[2];
+
+    std::fstream pipeWriter(pipeCpp, std::ios::app);
+    if (!pipeWriter.is_open()) {
+        std::cerr << "Error opening named pipe for writing: " << pipeCpp << std::endl;
+        return 1;
+    }
+
+    while (true) {
+        std::fstream pipeReader(pipeGo);
+        if (pipeReader.is_open()) {
+            std::string line;
+            while (std::getline(pipeReader, line)) {
+                std::cout << "\033[31m C++ - Message from Go : \033[0m" << line << std::endl;
+                
+                // PROCESSA COMANDO
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                pipeWriter << "200" << std::endl;
+            }
+            pipeReader.close();
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
+    // pipeWriter.close(); // You might not need to close it in an infinite loop
+    return 0;
+}
+    /*
     //init board
     std::srand(static_cast<unsigned>(std::time(nullptr)));
     int columns = 10, rows = 10, destroyers = 1, sumbarines = 1, cruisers = 1, battleships = 1, carriers = 1;
@@ -82,14 +120,14 @@ int main() {
 
         while(!fleet.getIsFleetDestroyed()){
             bot.doMove();
-            /*
-            int x, y;
-            std::cout << "coordinata x: ";
-            std::cin >> x;
-            std::cout << "coordinata y: ";
-            std::cin >> y;
-            ocean.getCell(x, y).setIsHit();
-            */
+            
+            //int x, y;
+            //std::cout << "coordinata x: ";
+            //std::cin >> x;
+            //std::cout << "coordinata y: ";
+            //std::cin >> y;
+            //ocean.getCell(x, y).setIsHit();
+            
 
             std::system("clear");
 
@@ -119,3 +157,4 @@ int main() {
         std::cin.ignore();
     }
 }
+*/
