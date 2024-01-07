@@ -34,7 +34,7 @@ json getMoves(BotType opponent_id, Ocean& ocean, Fleet& fleet){
         bot->doMove();
         move["x"] = bot->getLastHitX();
         move["y"] = bot->getLastHitY();
-        moves.push_back(move);
+        moves["moves"].push_back(move);
     };
     delete bot;
     return moves;

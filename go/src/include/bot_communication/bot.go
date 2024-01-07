@@ -9,18 +9,16 @@ import (
 	"time"
 )
 
-func PlayAgainstBot(pipeName string, gameData game_elements.GameData) {
+func PlayAgainstBot(pipeName string, gameData game_elements.GameData) (game_elements.BotMoves, error) {
 	jsonData, err := json.Marshal(gameData)
 	if err != nil {
-		fmt.Println("Error marshaling GameData to JSON:", err)
-		return
+		return game_elements.BotMoves{}, err
 	}
 
 	// Crea l'ipc
 	comm, err := EstablishCommunication(pipeName)
 	if err != nil {
-		fmt.Println("Error establishing communication")
-		return
+		return game_elements.BotMoves{}, err
 	}
 	defer comm.CleanupCommunication()
 
@@ -28,12 +26,21 @@ func PlayAgainstBot(pipeName string, gameData game_elements.GameData) {
 	cmd := exec.Command("./cpp/build/ShipBattleBot", comm.pipe_name, string(jsonData))
 	cmd.Stdout, cmd.Stderr = os.Stdout, os.Stderr
 	if err := cmd.Start(); err != nil {
-		fmt.Printf("Error starting C++: %v\n", err)
-		return
+		return game_elements.BotMoves{}, err
 	}
 	defer CleanupBot(cmd)
 	time.Sleep(500 * time.Millisecond)
-	comm.ReadFromPipe()
+
+	botMovesString, err := comm.ReadFromPipe()
+	if err != nil {
+		return game_elements.BotMoves{}, err
+	}
+
+	var botMoves game_elements.BotMoves
+	if err := json.Unmarshal([]byte(botMovesString), &botMoves); err != nil {
+		return game_elements.BotMoves{}, err
+	}
+	return botMoves, nil
 }
 
 func CleanupBot(cmd *exec.Cmd) {

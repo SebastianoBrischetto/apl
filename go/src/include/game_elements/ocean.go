@@ -73,7 +73,7 @@ func (o *Ocean) Hit(x, y int) {
 	}
 	if occupied {
 		fmt.Println("Cell has been hit and is occupied")
-		o.IncraseOccupiedUnhitCells(1)
+		o.IncraseOccupiedUnhitCells(-1)
 	} else {
 		fmt.Println("Cell has been hit and is not occupied")
 	}

@@ -27,7 +27,18 @@ func StartBotGame(gameData game_elements.GameData) error {
 			return fmt.Errorf("nave non creata - %v", err)
 		}
 	}
-	bot_communication.PlayAgainstBot("namedPipe", gameData)
+	botMoves, err := bot_communication.PlayAgainstBot("namedPipe", gameData)
+	if err != nil {
+		fmt.Println("Error in getting the bot moves :", err)
+	}
+
+	// TEST MOSSE BOT (da rimuovere)
+	var turns int
+	for i, move := range botMoves.Moves {
+		ocean.Hit(move.X, move.Y)
+		turns = i
+	}
+	fmt.Printf("unhit cells: %d , turns: %d \n", ocean.GetOccupiedUnhitCells(), turns)
 	return nil
 }
 

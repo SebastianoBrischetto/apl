@@ -46,11 +46,8 @@ func (comm *Communication) CleanupCommunication() {
 func (comm *Communication) ReadFromPipe() (string, error) {
 	if comm.scanner.Scan() {
 		message := comm.scanner.Text()
-		fmt.Println("\033[34m Go - Message from C++ : \033[0m", message)
 		return message, nil
 	} else {
-		err := comm.scanner.Err()
-		fmt.Println("Error reading from named pipe:", err)
-		return "", err
+		return "", comm.scanner.Err()
 	}
 }
