@@ -31,6 +31,7 @@ protected:
      */
     virtual void hunt();
 
+    // REFACTOR - viene passato il riferimento della cella trovata invece che delle coordinate
     /**
      * @brief Aggiunge le celle adiacenti alla cella contenente una nave trovata.
      * 
@@ -39,6 +40,7 @@ protected:
      */
     void addCloseCells(int x, int y);
 
+    // REFACTOR - viene passato il riferimento della cella da aggiungere invece che delle coordinate
     /**
      * @brief Aggiunge la cella con le coordinate x, y alla lista dei bersagli.
      * 

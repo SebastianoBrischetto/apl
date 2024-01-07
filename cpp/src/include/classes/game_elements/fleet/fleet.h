@@ -114,18 +114,21 @@ public:
      */
     void updateFleetNumbersOnHit();
 
-private:
     /**
-     * @brief Crea una nave del tipo richiesto con piazzamento casuale.
+     * @brief Crea una nave del tipo richiesto con piazzamento fornito.
      * 
      * @param ship_type Tipo delle nave che deve essere creata.
+     * @param x Coordinata x da cui iniziare a piazzare la nave.
+     * @param y Coordinata y da cui iniziare a piazzare la nave.
+     * @param direction Direzione verso la quale piazzare la nave.
      * @param ocean Riferimento all'oceano nella quale la nave verrà piazzata.
      * 
      * @return Il riferimento alla nave creata.
      * 
      * @throw std::runtime_error Se si prova a creare una nave non supportata.
      */
-    Ship createTypeOfShip(ShipType ship_type, Ocean& ocean);
+    static Ship createTypeOfShip(ShipType ship_type, int x, int y, Direction direction, Ocean& ocean);
+private:
     
     int destroyers_, submarines_and_cruisers_, battleships_, carriers_; ///< Numero dei vari tipi di nave.
     std::list<Ship> fleet_;                                             ///< Lista di navi che compongono la flotta.

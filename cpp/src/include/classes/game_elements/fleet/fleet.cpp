@@ -29,7 +29,10 @@ void Fleet::addToFleet(ShipType ship_type, int number_of_ships, Ocean& ocean) {
     for (int i = 0; i < number_of_ships; ++i) {
         while (true) {
             try {
-                fleet_.emplace_back(createTypeOfShip(ship_type, ocean));
+                int x = rand() % ocean.getNumberOfColumns();
+                int y = rand() % ocean.getNumberOfRows();
+                Direction direction = static_cast<Direction>(std::rand() % 4);
+                fleet_.emplace_back(Fleet::createTypeOfShip(ship_type, x, y, direction, ocean));
                 break;
             } catch (const std::exception&) {
             }
@@ -95,10 +98,7 @@ void Fleet::updateFleetNumbersOnHit() {
     }
 }
 
-Ship Fleet::createTypeOfShip(ShipType ship_type, Ocean& ocean) {
-    int x = rand() % ocean.getNumberOfColumns();
-    int y = rand() % ocean.getNumberOfRows();
-    Direction direction = static_cast<Direction>(std::rand() % 4);
+Ship Fleet::createTypeOfShip(ShipType ship_type, int x, int y, Direction direction ,Ocean& ocean) {
     switch (ship_type) {
         case DESTROYER:
             return Destroyer(x, y, direction, ocean);

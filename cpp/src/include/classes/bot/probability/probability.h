@@ -33,6 +33,7 @@ protected:
      */
     bool target() override;
 
+    // REFACTOR - viene passato il riferimento della cella da aggiungere invece che delle coordinate
     /**
      * @brief Aggiunge la cella con le coordinate x,y alla lista dei bersagli.
      * 

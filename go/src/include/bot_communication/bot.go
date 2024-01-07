@@ -1,18 +1,22 @@
 package bot_communication
 
 import (
-	"bufio"
+	"encoding/json"
 	"fmt"
+	"golang/go/src/include/game_elements"
 	"os"
 	"os/exec"
-	"sync"
+	"time"
 )
 
-// createBot initializes the communication and starts the bot process.
-func PlayAgainstBot(wg *sync.WaitGroup, pipeName string) {
-	defer wg.Done()
+func PlayAgainstBot(pipeName string, gameData game_elements.GameData) {
+	jsonData, err := json.Marshal(gameData)
+	if err != nil {
+		fmt.Println("Error marshaling GameData to JSON:", err)
+		return
+	}
 
-	// Establish the connection
+	// Crea l'ipc
 	comm, err := EstablishCommunication(pipeName)
 	if err != nil {
 		fmt.Println("Error establishing communication")
@@ -20,29 +24,16 @@ func PlayAgainstBot(wg *sync.WaitGroup, pipeName string) {
 	}
 	defer comm.CleanupCommunication()
 
-	// Start the bot process
-	cmd := exec.Command("./cpp/build/ShipBattleBot", comm.go_cpp_pipe_name, comm.cpp_go_pipe_name)
+	// Inizia il processo bot
+	cmd := exec.Command("./cpp/build/ShipBattleBot", comm.pipe_name, string(jsonData))
 	cmd.Stdout, cmd.Stderr = os.Stdout, os.Stderr
 	if err := cmd.Start(); err != nil {
 		fmt.Printf("Error starting C++: %v\n", err)
 		return
 	}
 	defer CleanupBot(cmd)
-
-	writer_scanner := bufio.NewScanner(os.Stdin)
-	for {
-		// Writing phase to the pipe
-		fmt.Print("Enter text to send to C++ (exit to stop the execution): ")
-		writer_scanner.Scan()
-		inputText := writer_scanner.Text()
-		if inputText == "exit" {
-			break
-		}
-
-		comm.WriteToPipe(inputText)
-
-		comm.ReadFromPipe()
-	}
+	time.Sleep(500 * time.Millisecond)
+	comm.ReadFromPipe()
 }
 
 func CleanupBot(cmd *exec.Cmd) {
@@ -53,4 +44,5 @@ func CleanupBot(cmd *exec.Cmd) {
 	if err := cmd.Wait(); err != nil {
 		fmt.Printf("Error waiting for C++ reader to exit: %v\n", err)
 	}
+	fmt.Printf("C++ closed\n")
 }
