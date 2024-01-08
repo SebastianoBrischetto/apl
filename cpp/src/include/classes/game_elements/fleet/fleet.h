@@ -21,25 +21,18 @@ class Fleet{
 
 public:
     /**
-     * @brief Costruttore della flotta del giocatore con nave già esistente.
+     * @brief Costruttore della flotta del giocatore.
      * 
-     * @param ship Riferimento a una nave già esistente.
+     * @param ocean Riferimento all'oceano della flotta.
      */
-    Fleet(Ship& ship);
-
-    /**
-     * @brief Costruttore della flotta del giocatore con navi di un determinato tipo piazzate in modo casuale.
-     * 
-     * @param ship_type Tipo delle navi che devono essere create.
-     * @param number_of_ships Numero di navi da creare.
-     * @param ocean Riferimento all'oceano nella quale le navi verranno piazzate.
-     */
-    Fleet(ShipType ship_type, int number_of_ships, Ocean& ocean);
+    Fleet(Ocean& ocean);
 
     /**
      * @brief Aggiunge navi già create alla flotta.
      * 
      * @param ship Nave da aggiungere.
+     * 
+     * @throw std::runtime_error Se si prova ad aggiungere navi appartenenti ad oceani diversi da quello della flotta.
      */
     void addToFleet(Ship& ship);
 
@@ -49,6 +42,8 @@ public:
      * @param ship_type Tipo delle navi che devono essere create.
      * @param number_of_ships Numero di navi da creare.
      * @param ocean Riferimento all'oceano nella quale le navi verranno piazzate.
+     * 
+     * @throw std::runtime_error Se si prova ad aggiungere navi appartenenti ad oceani diversi da quello della flotta.
      */
     void addToFleet(ShipType ship_type, int number_of_ships, Ocean& ocean);
 
@@ -88,6 +83,24 @@ public:
     int getNumberOfCarriers();
 
     /**
+     * @brief Ritorna una nave della flotta.
+     * 
+     * @param i indice della nave
+     * 
+     * @return Riferimento alla nave.
+     * 
+     * @throw std::runtime_error Se si prova ad accedere ad un elemento out of bounds.
+     */
+    Ship& getShip(int i);
+
+    /**
+     * @brief Ritorna il riferimento all'oceano della flotta.
+     * 
+     * @return Riferimento oceano.
+     */
+    Ocean& getFleetOcean();
+
+    /**
      * @brief Ritorna la copia dell'ultima nave distrutta.
      * 
      * @return Riferimento all'ultima nave distrutta.
@@ -114,21 +127,25 @@ public:
      */
     void updateFleetNumbersOnHit();
 
-private:
     /**
-     * @brief Crea una nave del tipo richiesto con piazzamento casuale.
+     * @brief Crea una nave del tipo richiesto con piazzamento fornito.
      * 
      * @param ship_type Tipo delle nave che deve essere creata.
+     * @param x Coordinata x da cui iniziare a piazzare la nave.
+     * @param y Coordinata y da cui iniziare a piazzare la nave.
+     * @param direction Direzione verso la quale piazzare la nave.
      * @param ocean Riferimento all'oceano nella quale la nave verrà piazzata.
      * 
      * @return Il riferimento alla nave creata.
      * 
      * @throw std::runtime_error Se si prova a creare una nave non supportata.
      */
-    Ship createTypeOfShip(ShipType ship_type, Ocean& ocean);
+    static Ship createTypeOfShip(ShipType ship_type, int x, int y, Direction direction, Ocean& ocean);
+private:
     
     int destroyers_, submarines_and_cruisers_, battleships_, carriers_; ///< Numero dei vari tipi di nave.
     std::list<Ship> fleet_;                                             ///< Lista di navi che compongono la flotta.
+    Ocean& ocean_;                                                       ///< Riferimento all'ocean della flotta
     Ship last_sunk_ship_;                                               ///< Copia dell'ultima nave affondata
 };
 

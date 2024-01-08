@@ -96,6 +96,7 @@ public:
      */
     int getMaxUnhitSpace(int init_x, int init_y, Direction direction, int length, bool target = false);
 
+    // REFACTOR - usa una cella come posizione iniziale e ritorna il riferimento alla cella invece di aggiornare le coordinate (x_reference, y_reference)
     /**
      * @brief Modifica le coordinate fornite in modo da spostarsi nella direzione richiesta.
      *
@@ -123,6 +124,7 @@ public:
      */
     void resetOceanProbability();
 
+    // REFACTOR - viene passato il riferimento della cella iniziale invece delle coordinate
     /**
      * @brief Calcola la probabilita delle celle lungo la direzione richiesta in base al numero di navi fornite.
      *
@@ -141,6 +143,7 @@ public:
                                     int destroyers, int submarines_and_cruisers, int battleships, int carriers, 
                                     bool target = false, int bonus = 0);
     
+    // REFACTOR - viene passato il riferimento della cella target iniziale invece delle coordinate
     /**
      * @brief Calcola le probabilità lungo le quattro direzioni rispetto ad un target.
      *
@@ -162,6 +165,7 @@ public:
      * @brief Modifica il valore che verrà utilizzato per incrementare la probabilità che una cella risulti occupata.
      * 
      * @param probability Riferimento al valore da aggiornare.
+     * @param index distanza rispetto alla cella dalla quale si sta calcolando la probabilita
      * @param destroyers Numero di destroyers (navi di lunghezza = 2) rimanenti.
      * @param submarines_and_cruisers Numero di submarines e cruisers (navi di lunghezza = 3) rimanenti.
      * @param battleships Numero di battleships (navi di lunghezza = 4) rimanenti.

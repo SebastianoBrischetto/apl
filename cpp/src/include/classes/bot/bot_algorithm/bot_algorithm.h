@@ -3,6 +3,14 @@
 
 #include "../../game_elements/include_game_elements.h"
 
+// Tipi di bot
+enum BotType{
+    RANDOM,             ///< 0.
+    HUNT_AND_TARGET,    ///< 1.
+    PARITY,             ///< 2.
+    PROBABILITY         ///< 3.
+};
+
 /**
  * @class BotAlgorithm
  * @brief Classe astratta per il bot di Battaglia Navale.
@@ -29,6 +37,21 @@ public:
     int getCounter();
 
     /**
+     * @brief Ritorna la coordinata x dell'ultima cella colpita.
+     * 
+     * @return Coordinata X.
+     */
+    int getLastHitX();
+
+    /**
+     * @brief Ritorna la coordinata y dell'ultima cella colpita.
+     * 
+     * @return Coordinata Y.
+     */
+    int getLastHitY();
+    
+    // REFACTOR - viene passato il riferimento della cella target iniziale invece delle coordinate
+    /**
      * @brief Effettua un attacco alle coordinate passate e notifica la flotta nemica di aggiornare il proprio stato.
      * 
      * @param x Coordinata x del colpo.
@@ -38,7 +61,10 @@ public:
      */
     bool hitAndNotify(int x, int y);
 
+
 protected:
+    int last_hit_x_ ;
+    int last_hit_y_ ;
     int columns_;   ///< Numero di colonne della griglia nemica.
     int rows_;      ///< Numero di righe della griglia nemica.
     int counter_;   ///< Numero di mosse effettuate dal bot.
