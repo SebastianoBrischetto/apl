@@ -1,31 +1,27 @@
 #include "fleet.h"
 
-Fleet::Fleet(Ship& ship) :
+Fleet::Fleet(Ocean& ocean) :
     destroyers_(0),
     submarines_and_cruisers_(0),
     battleships_(0),
     carriers_(0),
-    last_sunk_ship_(ship.getOcean())
-{
-    addToFleet(ship);
-}
-
-Fleet::Fleet(ShipType ship_type, int number_of_ships, Ocean& ocean) :
-    destroyers_(0),
-    submarines_and_cruisers_(0),
-    battleships_(0),
-    carriers_(0),
+    ocean_(ocean),
     last_sunk_ship_(ocean)
 {
-    addToFleet(ship_type, number_of_ships, ocean);
 }
 
 void Fleet::addToFleet(Ship& ship) {
+    if(&getFleetOcean() != &ship.getOcean()){
+        throw std::runtime_error("Non e possibile aggiungere navi appartenenti ad un oceano diverso");
+    }
     fleet_.push_back(ship);
     updateFleetNumbers(ship, 1);
 }
 
 void Fleet::addToFleet(ShipType ship_type, int number_of_ships, Ocean& ocean) {
+    if(&getFleetOcean() != &ocean){
+        throw std::runtime_error("Non e possibile aggiungere navi appartenenti ad un oceano diverso");
+    }
     for (int i = 0; i < number_of_ships; ++i) {
         while (true) {
             try {
@@ -61,8 +57,20 @@ int Fleet::getNumberOfCarriers() {
     return carriers_; 
 }
 
+Ship& Fleet::getShip(int i) {
+    if(i >= getNumberOfShips()){
+        throw std::runtime_error("Non e possibile recuperare la nave - out of bounds");
+    }
+    auto it = std::next(fleet_.begin(), i);
+    return *it;
+}
+
 Ship& Fleet::getLastSunkShip() { 
     return last_sunk_ship_; 
+}
+
+Ocean& Fleet::getFleetOcean() {
+    return ocean_;
 }
 
 bool Fleet::getIsFleetDestroyed() { 

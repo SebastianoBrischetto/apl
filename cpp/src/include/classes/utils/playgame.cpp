@@ -66,7 +66,8 @@ void tryGame(int columns, int rows, int destroyers, int sumbarines, int cruisers
 
         // Init Game board
         Ocean ocean(columns, rows);
-        Fleet fleet(DESTROYER, destroyers, ocean);
+        Fleet fleet(ocean);
+        fleet.addToFleet(DESTROYER, destroyers, ocean);
         fleet.addToFleet(SUBMARINE, sumbarines, ocean);
         fleet.addToFleet(CRUISER, cruisers, ocean);
         fleet.addToFleet(BATTLESHIP, battleships, ocean);

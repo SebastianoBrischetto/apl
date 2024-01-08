@@ -29,20 +29,22 @@ int main(int argc, char *argv[]) {
         pipeWriter.close();
         return 1;
     }
-    
+
     // Inizializzo la game board
     std::srand(static_cast<unsigned>(std::time(nullptr)));
-    Ocean ocean(gameData["columns"], gameData["rows"]);
-    Ship ship = createShipFromJson(gameData["ships"][0], ocean);
-    Fleet fleet(ship);
-    for(int i = 1; i < gameData["ships"].size(); i++){
-        Ship ship = createShipFromJson(gameData["ships"][i], ocean);
-        fleet.addToFleet(ship);
+    Ocean player_ocean(gameData["columns"], gameData["rows"]);
+    Fleet player_fleet(player_ocean);
+    Ocean bot_ocean(gameData["columns"], gameData["rows"]);
+    Fleet bot_fleet(bot_ocean);
+    for(int i = 0; i < gameData["ships"].size(); i++){
+        Ship ship = createShipFromJson(gameData["ships"][i], player_ocean);
+        player_fleet.addToFleet(ship);
+        bot_fleet.addToFleet(gameData["ships"][i]["ship_type"], 1, bot_ocean);
     }
 
-    // Recupera le mosse del bot e le scrive sulla named pipe
-    json moves = getMoves(static_cast<BotType>(gameData["opponent_id"]), ocean, fleet);
-    pipeWriter << moves << std::endl;
+    // Recupera i dati del bot e li scrive sulla named pipe
+    json botData = getBotData(static_cast<BotType>(gameData["opponent_id"]), player_ocean, player_fleet, bot_fleet);
+    pipeWriter << botData << std::endl;
     pipeWriter.close();
     return 0;
 }
@@ -51,6 +53,6 @@ int main(int argc, char *argv[]) {
 #include "include/classes/utils/playgame.cpp"
 int main(){
     std::srand(static_cast<unsigned>(std::time(nullptr)));
-    tryGame(10,10, 1, 1, 1, 1, 1, RANDOM);
+    tryGame(10,10, 1, 1, 1, 1, 1, PROBABILITY);
 }
 */

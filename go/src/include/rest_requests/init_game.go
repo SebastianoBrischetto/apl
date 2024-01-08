@@ -38,16 +38,23 @@ func StartGame(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, errorMessage, http.StatusBadRequest)
 		return
 	}
+	done := make(chan bool)
 	switch gameData.Game_Type {
 	case "bot":
-		if err := StartBotGame(*gameData); err != nil {
-			errorMessage := fmt.Sprintf("Error: %v", err)
-			fmt.Println(errorMessage)
-			http.Error(w, errorMessage, http.StatusBadRequest)
-		}
+		go func() {
+			defer func() {
+				done <- true
+			}()
+			if err := StartBotGame(*gameData); err != nil {
+				errorMessage := fmt.Sprintf("Error: %v", err)
+				fmt.Println(errorMessage)
+				http.Error(w, errorMessage, http.StatusBadRequest)
+			}
+		}()
 	case "player":
 		// logica vs player
 	default:
 		fmt.Println("Modalita non supportata")
 	}
+	<-done
 }

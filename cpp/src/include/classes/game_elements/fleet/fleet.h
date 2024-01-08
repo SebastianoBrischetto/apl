@@ -21,25 +21,18 @@ class Fleet{
 
 public:
     /**
-     * @brief Costruttore della flotta del giocatore con nave già esistente.
+     * @brief Costruttore della flotta del giocatore.
      * 
-     * @param ship Riferimento a una nave già esistente.
+     * @param ocean Riferimento all'oceano della flotta.
      */
-    Fleet(Ship& ship);
-
-    /**
-     * @brief Costruttore della flotta del giocatore con navi di un determinato tipo piazzate in modo casuale.
-     * 
-     * @param ship_type Tipo delle navi che devono essere create.
-     * @param number_of_ships Numero di navi da creare.
-     * @param ocean Riferimento all'oceano nella quale le navi verranno piazzate.
-     */
-    Fleet(ShipType ship_type, int number_of_ships, Ocean& ocean);
+    Fleet(Ocean& ocean);
 
     /**
      * @brief Aggiunge navi già create alla flotta.
      * 
      * @param ship Nave da aggiungere.
+     * 
+     * @throw std::runtime_error Se si prova ad aggiungere navi appartenenti ad oceani diversi da quello della flotta.
      */
     void addToFleet(Ship& ship);
 
@@ -49,6 +42,8 @@ public:
      * @param ship_type Tipo delle navi che devono essere create.
      * @param number_of_ships Numero di navi da creare.
      * @param ocean Riferimento all'oceano nella quale le navi verranno piazzate.
+     * 
+     * @throw std::runtime_error Se si prova ad aggiungere navi appartenenti ad oceani diversi da quello della flotta.
      */
     void addToFleet(ShipType ship_type, int number_of_ships, Ocean& ocean);
 
@@ -86,6 +81,24 @@ public:
      * @return Numero di carriers della flotta.
      */
     int getNumberOfCarriers();
+
+    /**
+     * @brief Ritorna una nave della flotta.
+     * 
+     * @param i indice della nave
+     * 
+     * @return Riferimento alla nave.
+     * 
+     * @throw std::runtime_error Se si prova ad accedere ad un elemento out of bounds.
+     */
+    Ship& getShip(int i);
+
+    /**
+     * @brief Ritorna il riferimento all'oceano della flotta.
+     * 
+     * @return Riferimento oceano.
+     */
+    Ocean& getFleetOcean();
 
     /**
      * @brief Ritorna la copia dell'ultima nave distrutta.
@@ -132,6 +145,7 @@ private:
     
     int destroyers_, submarines_and_cruisers_, battleships_, carriers_; ///< Numero dei vari tipi di nave.
     std::list<Ship> fleet_;                                             ///< Lista di navi che compongono la flotta.
+    Ocean& ocean_;                                                       ///< Riferimento all'ocean della flotta
     Ship last_sunk_ship_;                                               ///< Copia dell'ultima nave affondata
 };
 
