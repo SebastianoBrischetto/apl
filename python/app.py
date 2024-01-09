@@ -1,7 +1,7 @@
 from flask import Flask
 from db import db, User
 from elo import update_elo_rating
-from auth import authorize_user
+from auth import authorize_user, get_access_token
 from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
@@ -18,6 +18,10 @@ def update_elo():
 @app.route('/api/authorize', methods=['POST'])
 def authorize():
     return authorize_user()
+
+@app.route('/api/get_token', methods=['GET'])
+def get_token():
+    return get_access_token()
 
 if __name__ == '__main__':
     app.run(port=5000)
