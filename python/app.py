@@ -6,6 +6,7 @@ from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['JWT_SECRET_KEY'] = 'apl_2023-2024_project'
 db.init_app(app)
 jwt = JWTManager(app)
 
