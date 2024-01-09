@@ -3,7 +3,7 @@
 #include "include/classes/utils/json_utils.cpp"
 #include "include/classes/game_elements/include_game_elements.h"
 #include "include/classes/bot/include_bots.h"
-/*
+
 int main(int argc, char *argv[]) {
     // Controllo che il programma sia stato avviato in modo corretto
     if (argc != 3) {
@@ -43,17 +43,17 @@ int main(int argc, char *argv[]) {
     }
 
     // Recupera i dati del bot e li scrive sulla named pipe
-    json botData = getBotData(static_cast<BotType>(gameData["opponent_id"]), player_ocean, player_fleet, bot_fleet);
+    json botData = getBotData(static_cast<BotType>(gameData["game_code"]), player_ocean, player_fleet, bot_fleet);
     pipeWriter << botData << std::endl;
     pipeWriter.close();
     return 0;
 }
-*/
-
+/*
 #include "include/classes/utils/playgame.cpp"
 int main(){
     std::srand(static_cast<unsigned>(std::time(nullptr)));
     tryGame(10,10, 1, 1, 1, 1, 1, RANDOM);
 }
+*/
 
 

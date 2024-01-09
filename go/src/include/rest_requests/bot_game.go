@@ -17,7 +17,7 @@ const (
 )
 
 func StartBotGame(gameData game_elements.GameData) error {
-	if err := checkBotType(BotType(gameData.Opponent_ID)); err != nil {
+	if err := checkBotType(BotType(gameData.Game_Code)); err != nil {
 		return err
 	}
 	player_ocean := game_elements.NewOcean(gameData.Columns, gameData.Rows)
@@ -39,16 +39,6 @@ func StartBotGame(gameData game_elements.GameData) error {
 	}
 	fmt.Println("Mosse del bot: ", botMoves.Moves)
 	fmt.Println("Celle del bot: ", botMoves.OccupiedCoords)
-
-	// TEST MOSSE BOT (da rimuovere)
-
-	var turns int
-	for i, move := range botMoves.Moves {
-		player_ocean.Hit(move.X, move.Y)
-		turns = i
-	}
-	fmt.Printf("unhit cells: %d , turns: %d \n", player_ocean.GetOccupiedUnhitCells(), turns)
-
 	return nil
 }
 
