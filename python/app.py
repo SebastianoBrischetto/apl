@@ -27,7 +27,7 @@ def calculate_elo_route():
 
     p1_current_rating = p1_user.rating
     p2_current_rating = p2_user.rating
-
+    
     p1_new_rating = update_elo_rating(p1_current_rating, p2_current_rating, result)
     p2_new_rating = update_elo_rating(p2_current_rating, p1_current_rating, 1 - result)
 

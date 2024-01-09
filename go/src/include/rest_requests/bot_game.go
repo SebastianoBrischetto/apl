@@ -37,17 +37,18 @@ func StartBotGame(gameData game_elements.GameData) error {
 		cell.SetIsOccupied()
 		bot_ocean.IncraseOccupiedUnhitCells(1)
 	}
-	fmt.Println("numero celle occupate: ", bot_ocean.GetOccupiedUnhitCells())
+	fmt.Println("Mosse del bot: ", botMoves.Moves)
+	fmt.Println("Celle del bot: ", botMoves.OccupiedCoords)
 
 	// TEST MOSSE BOT (da rimuovere)
-	/*
-		var turns int
-		for i, move := range botMoves.Moves {
-			ocean.Hit(move.X, move.Y)
-			turns = i
-		}
-		fmt.Printf("unhit cells: %d , turns: %d \n", ocean.GetOccupiedUnhitCells(), turns)
-	*/
+
+	var turns int
+	for i, move := range botMoves.Moves {
+		player_ocean.Hit(move.X, move.Y)
+		turns = i
+	}
+	fmt.Printf("unhit cells: %d , turns: %d \n", player_ocean.GetOccupiedUnhitCells(), turns)
+
 	return nil
 }
 
