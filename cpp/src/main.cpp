@@ -3,7 +3,7 @@
 #include "include/classes/utils/json_utils.cpp"
 #include "include/classes/game_elements/include_game_elements.h"
 #include "include/classes/bot/include_bots.h"
-
+/*
 int main(int argc, char *argv[]) {
     // Controllo che il programma sia stato avviato in modo corretto
     if (argc != 3) {
@@ -48,11 +48,12 @@ int main(int argc, char *argv[]) {
     pipeWriter.close();
     return 0;
 }
+*/
 
-/*
 #include "include/classes/utils/playgame.cpp"
 int main(){
     std::srand(static_cast<unsigned>(std::time(nullptr)));
-    tryGame(10,10, 1, 1, 1, 1, 1, PROBABILITY);
+    tryGame(10,10, 1, 1, 1, 1, 1, RANDOM);
 }
-*/
+
+
