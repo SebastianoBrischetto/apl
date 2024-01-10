@@ -55,5 +55,3 @@ int main(){
     tryGame(10,10, 1, 1, 1, 1, 1, RANDOM);
 }
 */
-
-
