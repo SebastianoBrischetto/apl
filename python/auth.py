@@ -14,6 +14,9 @@ def authorize_user():
         new_user = User(username=username, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
+        access_token = create_access_token(identity=username)
+        save_access_token_on_server(username, access_token)
+        return jsonify({"message": "Authorization successful", "access_token": access_token}), 200
 
     if check_password_hash(user.password, password):
         access_token = create_access_token(identity=username)
