@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  game_server:
+    build: 
+      context: ./go
+      dockerfile: Dockerfile
+    container_name: game_server
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+
+  auth_server:
+    build: 
+      context: ./python
+      dockerfile: Dockerfile
+    container_name: auth_server
+    ports:
+      - "5000:5000"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

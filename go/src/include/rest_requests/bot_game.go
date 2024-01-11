@@ -3,8 +3,8 @@ package rest_requests
 import (
 	"errors"
 	"fmt"
-	"golang/go/src/include/bot_communication"
-	"golang/go/src/include/game_elements"
+	"golang/include/bot_communication"
+	"golang/include/game_elements"
 )
 
 type BotType int

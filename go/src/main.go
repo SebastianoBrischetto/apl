@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"golang/go/src/include/rest_requests"
+	"golang/include/rest_requests"
 	"net/http"
 )
 

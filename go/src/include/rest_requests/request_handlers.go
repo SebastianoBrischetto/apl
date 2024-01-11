@@ -3,7 +3,7 @@ package rest_requests
 import (
 	"encoding/json"
 	"errors"
-	"golang/go/src/include/game_elements"
+	"golang/include/game_elements"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -39,7 +39,7 @@ func CheckAccessToken(username, access_token string) error {
 	params := url.Values{}
 	params.Set("username", username)
 
-	resp, err := client.Get("http://localhost:5000/api/get_token?" + params.Encode())
+	resp, err := client.Get("http://auth_server:5000/api/get_token?" + params.Encode())
 	if err != nil {
 		return err
 	}

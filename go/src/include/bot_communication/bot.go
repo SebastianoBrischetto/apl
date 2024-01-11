@@ -3,7 +3,7 @@ package bot_communication
 import (
 	"encoding/json"
 	"fmt"
-	"golang/go/src/include/game_elements"
+	"golang/include/game_elements"
 	"os"
 	"os/exec"
 	"time"
@@ -23,7 +23,7 @@ func PlayAgainstBot(pipeName string, gameData game_elements.GameData) (game_elem
 	defer comm.CleanupCommunication()
 
 	// Inizia il processo bot
-	cmd := exec.Command("./cpp/build/ShipBattleBot", comm.pipe_name, string(jsonData))
+	cmd := exec.Command("./include/ShipBattleBot", comm.pipe_name, string(jsonData))
 	cmd.Stdout, cmd.Stderr = os.Stdout, os.Stderr
 	if err := cmd.Start(); err != nil {
 		return game_elements.BotMoves{}, err
