@@ -3,60 +3,44 @@ package rest_requests
 import (
 	"encoding/json"
 	"errors"
-	"golang/include/game_elements"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"time"
 )
 
-func handleInitGameJsonRequest(r *http.Request) (*game_elements.GameInitData, error) {
-	// Check if the request method is POST
-	if r.Method != http.MethodPost {
-		return nil, errors.New("invalid request method")
-	}
-
-	// Read the request body
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		return nil, errors.New("error reading request body")
-	}
-
-	// Parse the JSON data into a struct
-	var game_init_data game_elements.GameInitData
-	err = json.Unmarshal(body, &game_init_data)
-	if err != nil {
-		return nil, errors.New("error parsing JSON data")
-	}
-	return &game_init_data, nil
-}
-
+// effettua la richiesta al server di autenticazione e controlla che l'access token fornito dal client sia valido
 func CheckAccessToken(username, access_token string) error {
+	// inizializza un client http per effettuare la richiesta
 	client := &http.Client{
 		Timeout: time.Second * 10,
 	}
 
+	// setta i parametri della richiesta
 	params := url.Values{}
 	params.Set("username", username)
 
+	// effettua la richiesta all'endpoint giusto del server di autenticazione
 	resp, err := client.Get("http://auth_server:5000/api/get_token?" + params.Encode())
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
 
+	// legge il body della risposta
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}
 
+	// converte il body
 	var accessToken AccessTokenResponse
 	err = json.Unmarshal(body, &accessToken)
 	if err != nil {
 		return err
 	}
 
-	// Check if the returned access token matches the expected one
+	// controlla se l'access token ricevuto dal server di autenticazione coincide con quello fornito dall'utente
 	if accessToken.AccessToken != access_token {
 		return errors.New("access token invalido")
 	}

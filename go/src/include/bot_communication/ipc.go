@@ -7,30 +7,31 @@ import (
 	"syscall"
 )
 
-// Communication struct represents the communication channels.
+// rappresenta il canale di comunicazione.
 type Communication struct {
 	pipe_name string
 	pipe      *os.File
 	scanner   *bufio.Scanner
 }
 
-// establishCommunication creates and opens the named pipes for communication.
+// esegue il setup per l'ipc
 func EstablishCommunication(pipeName string) (*Communication, error) {
-	// Create the named pipes
+	// crea la named pipe
 	CreateNamedPipe(pipeName)
 
-	// Open the reading pipe
+	// apre la named pipe per leggere
 	pipe, err := os.OpenFile(pipeName, os.O_RDWR, os.ModeNamedPipe)
 	if err != nil {
 		return nil, fmt.Errorf("error opening file for reading: %v", err)
 	}
 
+	// inizializza lo scanner
 	scanner := bufio.NewScanner(pipe)
 
 	return &Communication{pipe_name: pipeName, pipe: pipe, scanner: scanner}, nil
 }
 
-// createNamedPipe creates a named pipe.
+// crea la named pipe (la rimuove se gia esistente).
 func CreateNamedPipe(pipeName string) {
 	os.Remove(pipeName)
 	if err := syscall.Mkfifo(pipeName, 0666); err != nil {
@@ -38,11 +39,13 @@ func CreateNamedPipe(pipeName string) {
 	}
 }
 
+// esegue il cleanup dell'ipc
 func (comm *Communication) CleanupCommunication() {
 	os.Remove(comm.pipe_name)
 	comm.pipe.Close()
 }
 
+// legge dalla named pipe
 func (comm *Communication) ReadFromPipe() (string, error) {
 	if comm.scanner.Scan() {
 		message := comm.scanner.Text()

@@ -5,15 +5,16 @@ import (
 	"fmt"
 )
 
-// Ocean
+// rappresenta una griglia di celle
 type Ocean struct {
-	columns              int
-	rows                 int
-	occupied_unhit_cells int
-	cells                [][]*Cell
+	Columns              int       `json:"columns,omitempty"`
+	Rows                 int       `json:"rows,omitempty"`
+	Occupied_unhit_cells int       `json:"occupied_unhit_cells,omitempty"`
+	Cells                [][]*Cell `json:"cells,omitempty"`
 }
 
-func NewOcean(columns, rows int) *Ocean {
+// crea un nuovo oceano composto da columns*rows celle
+func NewOcean(columns, rows int) Ocean {
 	cells := make([][]*Cell, columns)
 	for x := range cells {
 		cells[x] = make([]*Cell, rows)
@@ -21,55 +22,57 @@ func NewOcean(columns, rows int) *Ocean {
 			cells[x][y] = NewCell()
 		}
 	}
-	return &Ocean{
-		columns:              columns,
-		rows:                 rows,
-		occupied_unhit_cells: 0,
-		cells:                cells,
+	return Ocean{
+		Columns:              columns,
+		Rows:                 rows,
+		Occupied_unhit_cells: 0,
+		Cells:                cells,
 	}
 }
 
 func (o *Ocean) GetColumns() int {
-	return o.columns
+	return o.Columns
 }
 
 func (o *Ocean) GetRows() int {
-	return o.rows
+	return o.Rows
 }
 
+// ritorna la cella con le coordinate x,y , se si prova ad accedere an una cella fuori dalla griglia viene tornato un errore
 func (o *Ocean) GetCell(x, y int) (*Cell, error) {
 	if x < 0 || x >= o.GetColumns() || y < 0 || y >= o.GetRows() {
 		return nil, errors.New("out of bonds")
 	}
-	return o.cells[x][y], nil
+	return o.Cells[x][y], nil
 }
 
+// ritorna il numero di celle occupate ma non ancora colpite
 func (o *Ocean) GetOccupiedUnhitCells() int {
-	return o.occupied_unhit_cells
+	return o.Occupied_unhit_cells
 }
 
+// indica se uno spazio della griglia risulta occupato
 func (o *Ocean) IsSpaceOccupied(init_x, init_y, length int, direction Direction) error {
 	for i := 0; i < length; i++ {
 		cell, err := o.UpdateCoordinates(init_x, init_y, i, direction)
 		if err != nil {
 			return err
-		} else if cell.is_occupied {
+		} else if cell.GetIsOccupied() {
 			return errors.New("not enough space")
 		}
 	}
 	return nil
 }
 
-func (o *Ocean) Hit(x, y int) {
+// colpisce una cella della griglia
+func (o *Ocean) Hit(x, y int) error {
 	cell, err := o.GetCell(x, y)
 	if err != nil {
-		fmt.Println("Error:", err)
-		return
+		return err
 	}
 	occupied, err := cell.SetIsHit()
 	if err != nil {
-		fmt.Println("Error:", err)
-		return
+		return err
 	}
 	if occupied {
 		fmt.Println("Cell has been hit and is occupied")
@@ -77,12 +80,15 @@ func (o *Ocean) Hit(x, y int) {
 	} else {
 		fmt.Println("Cell has been hit and is not occupied")
 	}
+	return nil
 }
 
+// aumenta/diminuisce il numero di celle colpite e occupate rimanenti
 func (o *Ocean) IncraseOccupiedUnhitCells(n int) {
-	o.occupied_unhit_cells += n
+	o.Occupied_unhit_cells += n
 }
 
+// aggiorna le coordinate fornite per spostarsi verso una direzione
 func (o *Ocean) UpdateCoordinates(x, y, increment int, direction Direction) (*Cell, error) {
 	var return_x, return_y int
 	switch direction {

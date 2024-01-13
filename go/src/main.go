@@ -8,8 +8,9 @@ import (
 
 func main() {
 	http.HandleFunc("/start-game", rest_requests.StartGame)
+	http.HandleFunc("/do-move", rest_requests.DoMove)
+	http.HandleFunc("/get-game", rest_requests.GetGame)
 
-	// Start the server on port 8080
 	fmt.Println("Server is listening on :8080...")
 	http.ListenAndServe(":8080", nil)
 }

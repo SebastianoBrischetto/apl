@@ -4,6 +4,7 @@ import (
 	"errors"
 )
 
+// rappresenta le possibili direzioni di una nave
 type Direction int
 
 const (
@@ -23,6 +24,7 @@ const (
 	CARRIER    ShipType = 5 ///< Nave di lunghezza 5.
 )
 
+// rappresenta una nave
 type Ship struct {
 	Init_x    int       `json:"init_x"`
 	Init_y    int       `json:"init_y"`
@@ -30,6 +32,7 @@ type Ship struct {
 	Direction Direction `json:"direction"`
 }
 
+// controlla se la nave appartiene a un tipo supportato
 func checkShipType(ship_type ShipType) error {
 	switch ship_type {
 	case DESTROYER, SUBMARINE, CRUISER, BATTLESHIP, CARRIER:
@@ -39,6 +42,7 @@ func checkShipType(ship_type ShipType) error {
 	}
 }
 
+// crea una nuova nave appartenente all'oceano
 func NewShip(init_x, init_y int, ship_type ShipType, direction Direction, ocean *Ocean) (*Ship, error) {
 	if err := checkShipType(ship_type); err != nil {
 		return nil, err
