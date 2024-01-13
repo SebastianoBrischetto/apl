@@ -75,11 +75,11 @@ func (o *Ocean) Hit(x, y int) (bool, error) {
 		return false, err
 	}
 	if occupied {
-		fmt.Println("Cell has been hit and is occupied")
+		fmt.Printf("Cell {%d, %d} has been hit and is occupied\n", x, y)
 		o.IncraseOccupiedUnhitCells(-1)
 		return true, nil
 	} else {
-		fmt.Println("Cell has been hit and is not occupied")
+		fmt.Printf("Cell {%d, %d} has been hit and is not occupied\n", x, y)
 		return false, nil
 	}
 }
