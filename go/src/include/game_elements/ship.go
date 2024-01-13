@@ -14,6 +14,7 @@ const (
 	LEFT
 )
 
+// rappresenta i possibili tipi di nave
 type ShipType int
 
 const (

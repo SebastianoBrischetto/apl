@@ -12,6 +12,7 @@ type Game struct {
 	P1_ocean *game_elements.Ocean        `json:"p1_ocean,omitempty"`
 	P2_ocean *game_elements.Ocean        `json:"p2_ocean,omitempty"`
 	Moves    *bot_communication.BotMoves `json:"moves,omitempty"`
+	P1_turn  bool                        `json:"p1_turn"`
 }
 
 // partite in corso

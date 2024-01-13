@@ -9,6 +9,14 @@ import (
 	"net/http"
 )
 
+// rappresenta la richiesta effettuata dal client
+type DoMoveData struct {
+	User         string               `json:"username"`
+	Access_Token string               `json:"access_token"`
+	Game_id      string               `json:"game_id"`
+	Coords       game_elements.Coords `json:"coords"`
+}
+
 // effettua un hit alle coordinate fornite
 func DoMove(w http.ResponseWriter, r *http.Request) {
 	// recupera i dati della richiesta
@@ -35,21 +43,43 @@ func DoMove(w http.ResponseWriter, r *http.Request) {
 	gamesMu.Lock()
 	defer gamesMu.Unlock()
 
+	game_id := do_move_data.Game_id
 	// controlla che la partita esista
-	game, exists := games[do_move_data.Game_id]
+	game, exists := games[game_id]
 	if !exists {
 		http.Error(w, "Game not found", http.StatusNotFound)
 		return
 	}
 
+	// controlla che il giocatore che ha effettuato la richiesta sia il p1
+	is_p1 := (do_move_data.User == game_id)
+	p1_turn := game.P1_turn
+
+	if p1_turn != is_p1 {
+		errorMessage := "errore: turno nemico"
+		fmt.Println(errorMessage)
+		http.Error(w, errorMessage, http.StatusBadRequest)
+		return
+	}
+
+	// recupera l'oceano da colpire
+	var ocean *game_elements.Ocean
+	if is_p1 {
+		ocean = game.P2_ocean
+	} else {
+		ocean = game.P1_ocean
+	}
+
 	// effettua il colpo
-	err = game.P1_ocean.Hit(do_move_data.Coords.X, do_move_data.Coords.Y)
+	err = ocean.Hit(do_move_data.Coords.X, do_move_data.Coords.Y)
 	if err != nil {
 		errorMessage := fmt.Sprintf("Error: %v", err)
 		fmt.Println(errorMessage)
 		http.Error(w, errorMessage, http.StatusBadRequest)
 		return
 	}
+	game.P1_turn = !p1_turn
+	games[game_id] = game
 }
 
 // gestisce il body della richiesta POST
@@ -69,12 +99,4 @@ func handleDoMoveJsonRequest(r *http.Request) (*DoMoveData, error) {
 		return nil, errors.New("error parsing JSON data")
 	}
 	return &DoMoveData, nil
-}
-
-// rappresenta la richiesta effettuata dal client
-type DoMoveData struct {
-	User         string               `json:"username"`
-	Access_Token string               `json:"access_token"`
-	Game_id      string               `json:"game_id"`
-	Coords       game_elements.Coords `json:"coords"`
 }

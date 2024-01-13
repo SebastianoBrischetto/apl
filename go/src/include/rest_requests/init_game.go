@@ -59,6 +59,7 @@ func StartGame(w http.ResponseWriter, r *http.Request) {
 			P1_ocean: &p1_ocean,
 			P2_ocean: &p2_ocean,
 			Moves:    &bot_moves,
+			P1_turn:  true,
 		}
 		gamesMu.Unlock()
 		return
