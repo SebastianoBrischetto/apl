@@ -1,6 +1,6 @@
 package game_elements
 
-// Struct to represent the game data
+// parametri necessari per iniziare una griglia
 type GameData struct {
 	Game_Code int    `json:"game_code"`
 	Columns   int    `json:"columns"`
