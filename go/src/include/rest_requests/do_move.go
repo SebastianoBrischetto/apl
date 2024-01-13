@@ -55,7 +55,6 @@ func DoMove(w http.ResponseWriter, r *http.Request) {
 	// controlla il turno
 	is_p1 := (do_move_data.User == game_id)
 	p1_turn := game.P1_turn
-
 	if p1_turn != is_p1 {
 		errorMessage := "errore: turno nemico"
 		fmt.Println(errorMessage)
@@ -71,7 +70,7 @@ func DoMove(w http.ResponseWriter, r *http.Request) {
 		ocean = game.P1_ocean
 	}
 
-	// effettua il colpo
+	// effettua il colpo (se valido)
 	x := do_move_data.Coords.X
 	y := do_move_data.Coords.Y
 	is_occupied, err := ocean.Hit(x, y)
@@ -82,7 +81,7 @@ func DoMove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// aggiorna il client
+	// risponde al client
 	response := struct {
 		Last_move  *game_elements.Coords `json:"last_move,omitempty"`
 		IsOccupied bool                  `json:"is_occupied"`
@@ -93,8 +92,18 @@ func DoMove(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 
-	// aggiorna i dati della partita per il prossimo turno
-	game.P1_turn = !p1_turn
+	// esegue la mossa del bot o passa il turno all'altro giocatore
+	if game.Moves != nil {
+		moves := game.Moves.Moves
+		x = moves[0].X
+		y = moves[0].Y
+		game.P1_ocean.Hit(x, y)
+		game.Moves.Moves = moves[1:]
+	} else {
+		game.P1_turn = !p1_turn
+	}
+
+	// aggiorna lo stato della partita
 	game.Last_move = &game_elements.Coords{X: x, Y: y}
 	games[game_id] = game
 }
