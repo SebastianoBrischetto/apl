@@ -65,22 +65,23 @@ func (o *Ocean) IsSpaceOccupied(init_x, init_y, length int, direction Direction)
 }
 
 // colpisce una cella della griglia
-func (o *Ocean) Hit(x, y int) error {
+func (o *Ocean) Hit(x, y int) (bool, error) {
 	cell, err := o.GetCell(x, y)
 	if err != nil {
-		return err
+		return false, err
 	}
 	occupied, err := cell.SetIsHit()
 	if err != nil {
-		return err
+		return false, err
 	}
 	if occupied {
 		fmt.Println("Cell has been hit and is occupied")
 		o.IncraseOccupiedUnhitCells(-1)
+		return true, nil
 	} else {
 		fmt.Println("Cell has been hit and is not occupied")
+		return false, nil
 	}
-	return nil
 }
 
 // aumenta/diminuisce il numero di celle colpite e occupate rimanenti

@@ -55,11 +55,12 @@ func StartGame(w http.ResponseWriter, r *http.Request) {
 		game_id := game_init_data.User
 		gamesMu.Lock()
 		games[game_id] = Game{
-			Game_id:  game_id,
-			P1_ocean: &p1_ocean,
-			P2_ocean: &p2_ocean,
-			Moves:    &bot_moves,
-			P1_turn:  true,
+			Game_id:   game_id,
+			P1_ocean:  &p1_ocean,
+			P2_ocean:  &p2_ocean,
+			Moves:     &bot_moves,
+			P1_turn:   true,
+			Last_move: nil,
 		}
 		gamesMu.Unlock()
 		return
