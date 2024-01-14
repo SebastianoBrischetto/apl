@@ -1,7 +1,6 @@
 package rest_requests
 
 import (
-	"errors"
 	"fmt"
 	"golang/include/bot_communication"
 	"golang/include/game_elements"
@@ -17,20 +16,32 @@ const (
 	PROBABILITY
 )
 
+func checkBotType(game_code string) error {
+	switch game_code {
+	case "0":
+		return nil
+	case "1":
+		return nil
+	case "2":
+		return nil
+	case "3":
+		return nil
+	default:
+		return fmt.Errorf("invalid bot value: %s", game_code)
+	}
+}
+
 // ritorna i parametri necessari ad iniziare una partita contro il bot
 func StartBotGame(gameData game_elements.GameData) (game_elements.Ocean, game_elements.Ocean, bot_communication.BotMoves, error) {
-	// controlla che il bot sia supportato
-	if err := checkBotType(BotType(gameData.Game_Code)); err != nil {
+	err := checkBotType(gameData.Game_Code)
+	if err != nil {
 		return game_elements.Ocean{}, game_elements.Ocean{}, bot_communication.BotMoves{}, err
 	}
 
-	// crea l'oceano appartenente al giocatore e controlla che le navi piazzate al suo interno siano valide
-	player_ocean := game_elements.NewOcean(gameData.Columns, gameData.Rows)
-	for _, ship := range gameData.Ships {
-		_, err := game_elements.NewShip(ship.Init_x, ship.Init_y, ship.Ship_type, ship.Direction, &player_ocean)
-		if err != nil {
-			return game_elements.Ocean{}, game_elements.Ocean{}, bot_communication.BotMoves{}, fmt.Errorf("nave non creata - %v", err)
-		}
+	// crea l'oceano appartenente al giocatore
+	player_ocean, err := start_player_ocean(gameData)
+	if err != nil {
+		return game_elements.Ocean{}, game_elements.Ocean{}, bot_communication.BotMoves{}, err
 	}
 
 	// recupera le mosse del bot
@@ -47,14 +58,4 @@ func StartBotGame(gameData game_elements.GameData) (game_elements.Ocean, game_el
 		bot_ocean.IncraseOccupiedUnhitCells(1)
 	}
 	return player_ocean, bot_ocean, botMoves, nil
-}
-
-// controlla se il bot appartiene a un tipo supportato
-func checkBotType(bot_type BotType) error {
-	switch bot_type {
-	case RANDOM, HUNT_AND_TARGET, PARITY, PROBABILITY:
-		return nil
-	default:
-		return errors.New("invalid bot type")
-	}
 }

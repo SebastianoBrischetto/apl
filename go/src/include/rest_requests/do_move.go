@@ -39,16 +39,22 @@ func DoMove(w http.ResponseWriter, r *http.Request) {
 		}
 	*/
 
-	// blocca la mappa delle partite in corso e la chiude alla fine delle operazioni
-	gamesMu.Lock()
-	defer gamesMu.Unlock()
-
 	game_id := do_move_data.Game_id
 
 	// controlla che la partita esista
+	gamesMu.Lock()
 	game, exists := games[game_id]
+	gamesMu.Unlock()
+
+	// se la partita non esiste esce
 	if !exists {
 		http.Error(w, "Game not found", http.StatusNotFound)
+		return
+	}
+
+	// se manca l'oceano del giocatore p2 esce
+	if game.P2_ocean == nil {
+		http.Error(w, "P2 missing", http.StatusNotFound)
 		return
 	}
 
@@ -105,7 +111,10 @@ func DoMove(w http.ResponseWriter, r *http.Request) {
 
 	// aggiorna lo stato della partita
 	game.Last_move = &game_elements.Coords{X: x, Y: y}
+	gamesMu.Lock()
 	games[game_id] = game
+	gamesMu.Unlock()
+
 }
 
 // gestisce il body della richiesta POST

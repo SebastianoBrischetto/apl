@@ -8,6 +8,7 @@ import (
 
 func main() {
 	http.HandleFunc("/start-game", rest_requests.StartGame)
+	http.HandleFunc("/join-game", rest_requests.JoinGame)
 	http.HandleFunc("/do-move", rest_requests.DoMove)
 	http.HandleFunc("/get-game", rest_requests.GetGame)
 

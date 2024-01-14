@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "include/classes/utils/json_utils.cpp"
 #include "include/classes/game_elements/include_game_elements.h"
 #include "include/classes/bot/include_bots.h"
@@ -42,8 +43,18 @@ int main(int argc, char *argv[]) {
         bot_fleet.addToFleet(gameData["ships"][i]["ship_type"], 1, bot_ocean);
     }
 
-    // Recupera i dati del bot e li scrive sulla named pipe
-    json botData = getBotData(static_cast<BotType>(gameData["game_code"]), player_ocean, player_fleet, bot_fleet);
+    // Recupera i dati del bot e li scrive sulla named pipe, in caso di codice bot non supportato usa il bot random
+    BotType bot_type = RANDOM;
+    try {
+        std::string str = gameData["game_code"];
+        int n = std::stoi(str);
+        if(n>=0 && n <=3){
+            bot_type = static_cast<BotType>(n);
+        }
+    }catch (...){
+        std::cerr << "Errore conversione game code." << std::endl;
+    }
+    json botData = getBotData(bot_type, player_ocean, player_fleet, bot_fleet);
     pipeWriter << botData << std::endl;
     pipeWriter.close();
     return 0;
