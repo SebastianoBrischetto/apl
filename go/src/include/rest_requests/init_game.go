@@ -66,8 +66,28 @@ func StartGame(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "player":
-		// logica vs player
+		// inizializza gli oceani dei due giocatori e recupera le mosse del bot
+		p1_ocean, err := start_player_ocean(game_init_data.Game_Data)
+		if err != nil {
+			errorMessage := fmt.Sprintf("Error: %v", err)
+			fmt.Println(errorMessage)
+			http.Error(w, errorMessage, http.StatusBadRequest)
+			return
+		}
 
+		// crea una partita con game_id = nome_utente
+		game_id := game_init_data.User
+		gamesMu.Lock()
+		games[game_id] = Game{
+			Game_id:   game_id,
+			P1_ocean:  &p1_ocean,
+			P2_ocean:  nil,
+			Moves:     nil,
+			P1_turn:   true,
+			Last_move: nil,
+		}
+		gamesMu.Unlock()
+		return
 	default:
 		fmt.Println("Modalita non supportata")
 	}
