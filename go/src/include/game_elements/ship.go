@@ -1,10 +1,11 @@
+// Pacchetto game_elements fornisce elementi di gioco per il server di battaglia navale.
 package game_elements
 
 import (
 	"errors"
 )
 
-// rappresenta le possibili direzioni di una nave
+// Direction rappresenta le possibili direzioni di una nave.
 type Direction int
 
 const (
@@ -14,7 +15,7 @@ const (
 	LEFT
 )
 
-// rappresenta i possibili tipi di nave
+// ShipType rappresenta i possibili tipi di nave.
 type ShipType int
 
 const (
@@ -25,25 +26,26 @@ const (
 	CARRIER    ShipType = 5 ///< Nave di lunghezza 5.
 )
 
-// rappresenta una nave
+// Ship rappresenta una nave con la sua posizione iniziale, tipo e direzione.
 type Ship struct {
-	Init_x    int       `json:"init_x"`
-	Init_y    int       `json:"init_y"`
-	Ship_type ShipType  `json:"ship_type"`
+	InitX     int       `json:"init_x"`
+	InitY     int       `json:"init_y"`
+	ShipType  ShipType  `json:"ship_type"`
 	Direction Direction `json:"direction"`
 }
 
-// controlla se la nave appartiene a un tipo supportato
+// checkShipType controlla se il tipo di nave appartiene a quelli supportati.
 func checkShipType(ship_type ShipType) error {
 	switch ship_type {
 	case DESTROYER, SUBMARINE, CRUISER, BATTLESHIP, CARRIER:
 		return nil
 	default:
-		return errors.New("invalid ship type")
+		return errors.New("tipo di nave non valido")
 	}
 }
 
-// crea una nuova nave appartenente all'oceano
+// NewShip crea una nuova nave posizionata nell'oceano, verificando prima se lo spazio è disponibile.
+// Restituisce un errore se il tipo di nave non è supportato o se lo spazio non è sufficiente.
 func NewShip(init_x, init_y int, ship_type ShipType, direction Direction, ocean *Ocean) (*Ship, error) {
 	if err := checkShipType(ship_type); err != nil {
 		return nil, err
@@ -60,18 +62,25 @@ func NewShip(init_x, init_y int, ship_type ShipType, direction Direction, ocean 
 		cell.SetIsOccupied()
 	}
 	ocean.IncraseOccupiedUnhitCells(length)
-	return &Ship{Init_x: init_x, Init_y: init_y, Ship_type: ship_type, Direction: direction}, nil
+	return &Ship{InitX: init_x, InitY: init_y, ShipType: ship_type, Direction: direction}, nil
 }
 
+// GetInitX restituisce la coordinata X della posizione iniziale della nave.
 func (s *Ship) GetInitX() int {
-	return s.Init_x
+	return s.InitX
 }
+
+// GetInitY restituisce la coordinata Y della posizione iniziale della nave.
 func (s *Ship) GetInitY() int {
-	return s.Init_y
+	return s.InitY
 }
+
+// GetShipType restituisce il tipo di nave.
 func (s *Ship) GetShipType() ShipType {
-	return s.Ship_type
+	return s.ShipType
 }
+
+// GetDirection restituisce la direzione della nave.
 func (s *Ship) GetDirection() Direction {
 	return s.Direction
 }

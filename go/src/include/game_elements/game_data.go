@@ -1,9 +1,10 @@
+// Pacchetto game_elements fornisce elementi di gioco per il server di battaglia navale.
 package game_elements
 
-// parametri necessari per iniziare una griglia
+// GameData rappresenta i parametri necessari per iniziare una griglia di gioco.
 type GameData struct {
-	Game_Code string `json:"game_code"`
-	Columns   int    `json:"columns"`
-	Rows      int    `json:"rows"`
-	Ships     []Ship `json:"ships"`
+	GameCode string `json:"game_code"`
+	Columns  int    `json:"columns"`
+	Rows     int    `json:"rows"`
+	Ships    []Ship `json:"ships"`
 }

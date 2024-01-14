@@ -1,4 +1,4 @@
-package bot_communication
+package bot
 
 import (
 	"bufio"
