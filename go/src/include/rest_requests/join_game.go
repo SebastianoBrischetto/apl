@@ -1,3 +1,4 @@
+// Pacchetto rest_requests gestisce le richieste REST.
 package rest_requests
 
 import (
@@ -5,70 +6,66 @@ import (
 	"net/http"
 )
 
-// inizia una partita
+// JoinGame permette a un giocatore di entrare in una partita.
 func JoinGame(w http.ResponseWriter, r *http.Request) {
-	// recupera i dati della richiesta
-	game_init_data, err := handleInitGameJsonRequest(r)
+	// Recupera i dati della richiesta.
+	new_game_data, err := HandleNewGameJsonRequests(r)
 	if err != nil {
-		errorMessage := fmt.Sprintf("Error: %v", err)
-		fmt.Println(errorMessage)
-		http.Error(w, errorMessage, http.StatusBadRequest)
+		error_message := fmt.Sprintf("Errore: %v", err)
+		http.Error(w, error_message, http.StatusBadRequest)
 		return
 	}
 
-	// controlla che l'access token risulti valido
+	// Controlla che l'access token sia valido (commentato per ora).
 	/*
-		err = CheckAccessToken(game_init_data.User, game_init_data.Access_Token)
+		err = CheckAccessToken(new_game_data.User, new_game_data.Access_Token)
 		if err != nil {
-			errorMessage := fmt.Sprintf("Error: %v", err)
-				fmt.Println(errorMessage)
-				http.Error(w, errorMessage, http.StatusBadRequest)
-				return
+			error_message := fmt.Sprintf("Errore: %v", err)
+			http.Error(w, error_message, http.StatusBadRequest)
+			return
 		}
 	*/
 
-	// controlla che la modalita sia quella giusta
-	if game_init_data.Game_Type != "player" {
-		errorMessage := "Error: Modalita partita errata"
-		fmt.Println(errorMessage)
-		http.Error(w, errorMessage, http.StatusBadRequest)
+	// Controlla che la modalità sia quella giusta.
+	if new_game_data.GameType != "player" {
+		error_message := "Errore: Modalità partita errata"
+		http.Error(w, error_message, http.StatusBadRequest)
 		return
 	}
-	game_id := game_init_data.Game_Data.Game_Code
+	game_id := new_game_data.GameData.GameCode
 
-	// controlla che la partita esista
-	gamesMu.Lock()
-	game, exists := games[game_id]
-	gamesMu.Unlock()
+	// Controlla che la partita esista.
+	GamesMu.Lock()
+	game, exists := Games[game_id]
+	GamesMu.Unlock()
 
 	if !exists {
-		http.Error(w, "Game not found", http.StatusNotFound)
+		http.Error(w, "Errore: Partita non trovata", http.StatusNotFound)
 		return
 	}
 
-	// controlla che non sia gia presente un altro giocatore
-	if game.P2_ocean != nil {
-		http.Error(w, "P2 already present", http.StatusBadRequest)
+	// Controlla che non sia già presente un altro giocatore.
+	if game.P2Ocean != nil {
+		http.Error(w, "Errore: P2 già presente", http.StatusBadRequest)
 		return
 	}
 
-	// controlla la dimensione della griglia
-	if game.P1_ocean.Columns != game_init_data.Game_Data.Columns || game.P1_ocean.Rows != game_init_data.Game_Data.Rows {
-		http.Error(w, "Wrong ocean size", http.StatusBadRequest)
+	// Controlla la dimensione della griglia.
+	if game.P1Ocean.Columns != new_game_data.GameData.Columns || game.P1Ocean.Rows != new_game_data.GameData.Rows {
+		http.Error(w, "Errore: Dimensioni dell'oceano errate", http.StatusBadRequest)
 		return
 	}
 
-	// prova a creare l'oceano del giocatore p2
-	p2_ocean, err := start_player_ocean(game_init_data.Game_Data)
+	// Prova a creare l'oceano del giocatore P2.
+	p2_ocean, err := CreatePlayerOcean(new_game_data.GameData)
 	if err != nil {
-		errorMessage := fmt.Sprintf("Error: %v", err)
-		fmt.Println(errorMessage)
-		http.Error(w, errorMessage, http.StatusBadRequest)
+		error_message := fmt.Sprintf("Errore: %v", err)
+		http.Error(w, error_message, http.StatusBadRequest)
 		return
 	}
-	// aggiorna la partita con i dati del secondo giocatore
-	game.P2_ocean = &p2_ocean
-	gamesMu.Lock()
-	games[game_id] = game
-	gamesMu.Unlock()
+	// Aggiorna la partita con i dati del secondo giocatore.
+	game.P2Ocean = &p2_ocean
+	GamesMu.Lock()
+	Games[game_id] = game
+	GamesMu.Unlock()
 }

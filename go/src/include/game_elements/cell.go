@@ -1,45 +1,49 @@
+// Pacchetto game_elements fornisce elementi di gioco per il server di battaglia navale.
 package game_elements
 
 import (
 	"errors"
 )
 
-// rappresenta la cella
+// Cell rappresenta una singola cella.
 type Cell struct {
-	Is_hit      bool `json:"is_hit"`
-	Is_occupied bool `json:"is_occupied"`
+	IsHit      bool `json:"is_hit"`
+	IsOccupied bool `json:"is_occupied"`
 }
 
-// crea una nuova cella
+// NewCell restituisce una nuova istanza di Cell inizializzata con i valori predefiniti.
 func NewCell() *Cell {
-	return &Cell{Is_hit: false, Is_occupied: false}
+	return &Cell{IsHit: false, IsOccupied: false}
 }
 
-// setta la cella a colpita (se gia colpita torna un errore), torna true se ha colpito una cella occupata
+// SetIsHit imposta la cella come colpita e restituisce true se la cella era occupata.
+// Restituisce un errore se la cella è già stata colpita in precedenza.
 func (c *Cell) SetIsHit() (bool, error) {
 	if c.GetIsHit() {
-		return false, errors.New("Cell already hit")
+		return false, errors.New("cella già colpita")
 	}
-	c.Is_hit = true
-	if c.Is_occupied {
+	c.IsHit = true
+	if c.IsOccupied {
 		return true, nil
 	}
 	return false, nil
 }
 
-// setta la cella a occupata (se gia occupata torna un errore)
+// SetIsOccupied imposta la cella come occupata e restituisce un errore se la cella è già occupata.
 func (c *Cell) SetIsOccupied() error {
 	if c.GetIsOccupied() {
-		return errors.New("Cell already occupied")
+		return errors.New("cella già occupata")
 	}
-	c.Is_occupied = true
+	c.IsOccupied = true
 	return nil
 }
 
+// GetIsHit restituisce true se la cella è stata colpita, altrimenti restituisce false.
 func (c *Cell) GetIsHit() bool {
-	return c.Is_hit
+	return c.IsHit
 }
 
+// GetIsOccupied restituisce true se la cella è occupata, altrimenti restituisce false.
 func (c *Cell) GetIsOccupied() bool {
-	return c.Is_occupied
+	return c.IsOccupied
 }
