@@ -18,6 +18,29 @@ type DoMoveData struct {
 	Coords      game_elements.Coords `json:"coords"`
 }
 
+// GameOverResponse rappresenta la risposta in caso di partita terminata
+type GameOverResponse struct {
+	LastMove *game_elements.Coords `json:"last_move"`
+	P1Won    bool                  `json:"p1_won"`
+}
+
+// GameOverResponse rappresenta la risposta in caso di colpo valido
+type DoMoveResponse struct {
+	LastMove   *game_elements.Coords `json:"last_move,omitempty"`
+	IsOccupied bool                  `json:"is_occupied"`
+}
+
+// IsGameOver controlla se la partita è finita e ritorna la risposta da inviare.
+func IsGameOver(game Game) (interface{}, bool) {
+	if game.P1Ocean.IsFleetDestroyed() || game.P2Ocean.IsFleetDestroyed() {
+		return GameOverResponse{
+			LastMove: game.LastMove,
+			P1Won:    game.P2Ocean.IsFleetDestroyed(),
+		}, true
+	}
+	return GameOverResponse{}, false
+}
+
 // DoMove effettua un colpo alle coordinate fornite sulla griglia dell'avversario.
 // Risponde con l'esito del colpo ed eventuali informazioni aggiuntive.
 func DoMove(w http.ResponseWriter, r *http.Request) {
@@ -68,6 +91,17 @@ func DoMove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Se la partita e finita lo comunica al perdente ed elimina la partita dalla memoria
+	response, is_game_over := IsGameOver(game)
+	if is_game_over {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		GamesMu.Lock()
+		delete(Games, game_id)
+		GamesMu.Unlock()
+		return
+	}
+
 	// Recupera l'oceano da colpire in base al turno.
 	var ocean *game_elements.Ocean
 	if is_p1 {
@@ -87,19 +121,25 @@ func DoMove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Risponde al client con l'esito del colpo e le informazioni aggiuntive.
-	response := struct {
-		LastMove   *game_elements.Coords `json:"last_move,omitempty"`
-		IsOccupied bool                  `json:"is_occupied"`
-	}{
-		LastMove:   game.LastMove,
-		IsOccupied: is_occupied,
+	// Risponde al client informandolo della vittoria o con l'esito del colpo e le informazioni aggiuntive.
+	response, is_game_over = IsGameOver(game)
+	if !is_game_over {
+		response = DoMoveResponse{
+			LastMove:   game.LastMove,
+			IsOccupied: is_occupied,
+		}
 	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 
 	// Esegue la mossa del bot o passa il turno all'altro giocatore.
 	if game.Moves != nil {
+		if is_game_over {
+			GamesMu.Lock()
+			delete(Games, game_id)
+			GamesMu.Unlock()
+			return
+		}
 		moves := game.Moves.Moves
 		x = moves[0].X
 		y = moves[0].Y

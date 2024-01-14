@@ -93,6 +93,10 @@ func (o *Ocean) IncraseOccupiedUnhitCells(n int) {
 	o.OccupiedUnhitCells += n
 }
 
+func (o *Ocean) IsFleetDestroyed() bool {
+	return o.GetOccupiedUnhitCells() <= 0
+}
+
 // UpdateCoordinates aggiorna le coordinate fornite per spostarsi in una direzione specifica,
 // restituendo la cella risultante.
 // Restituisce un errore se la direzione è errata o se le nuove coordinate sono fuori dai limiti della griglia.
