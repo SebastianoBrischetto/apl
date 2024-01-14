@@ -134,6 +134,7 @@ func DoMove(w http.ResponseWriter, r *http.Request) {
 
 	// Esegue la mossa del bot o passa il turno all'altro giocatore.
 	if game.Moves != nil {
+		// Se la partita e finita la elimina
 		if is_game_over {
 			GamesMu.Lock()
 			delete(Games, game_id)
