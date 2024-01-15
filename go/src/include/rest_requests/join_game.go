@@ -17,14 +17,12 @@ func JoinGame(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Controlla che l'access token sia valido (commentato per ora).
-	/*
-		err = CheckAccessToken(new_game_data.User, new_game_data.Access_Token)
-		if err != nil {
-			error_message := fmt.Sprintf("Errore: %v", err)
-			http.Error(w, error_message, http.StatusBadRequest)
-			return
-		}
-	*/
+	err = CheckAccessToken(new_game_data.User, new_game_data.AccessToken)
+	if err != nil {
+		error_message := fmt.Sprintf("Errore: %v", err)
+		http.Error(w, error_message, http.StatusBadRequest)
+		return
+	}
 
 	// Controlla che la modalità sia quella giusta.
 	if new_game_data.GameType != "player" {
@@ -65,6 +63,7 @@ func JoinGame(w http.ResponseWriter, r *http.Request) {
 	}
 	// Aggiorna la partita con i dati del secondo giocatore.
 	game.P2Ocean = &p2_ocean
+	game.P2ID = new_game_data.User
 	GamesMu.Lock()
 	Games[game_id] = game
 	GamesMu.Unlock()

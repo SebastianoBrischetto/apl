@@ -1,6 +1,6 @@
 from flask import Flask
 from db import db, User
-from elo import update_elo_rating
+from elo import update_elo_rating, get_elo_rating
 from auth import authorize_user, get_access_token
 from flask_jwt_extended import JWTManager
 
@@ -11,9 +11,13 @@ db.init_app(app)
 jwt = JWTManager(app)
 
 # Combine route decorators for better readability
-@app.route('/api/update_elo', methods=['POST'])
+@app.route('/api/update_elo', methods=['GET'])
 def update_elo():
     return update_elo_rating()
+
+@app.route('/api/get_elo', methods=['GET'])
+def get_elo():
+    return get_elo_rating()
 
 @app.route('/api/authorize', methods=['POST'])
 def authorize():
