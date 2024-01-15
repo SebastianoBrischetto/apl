@@ -52,16 +52,13 @@ func DoMove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Controlla che l'access token sia valido (commentato per ora).
-	/*
-		err = CheckAccessToken(do_move_data.User, do_move_data.Access_Token)
-		if err != nil {
-			error_message := fmt.Sprintf("Errore: %v", err)
-			http.Error(w, error_message, http.StatusBadRequest)
-			return
-		}
-	*/
-
+	// Controlla che l'access token sia valido.
+	err = CheckAccessToken(do_move_data.User, do_move_data.AccessToken)
+	if err != nil {
+		error_message := fmt.Sprintf("Errore: %v", err)
+		http.Error(w, error_message, http.StatusBadRequest)
+		return
+	}
 	game_id := do_move_data.GameID
 
 	// Controlla se la partita esiste.
@@ -91,14 +88,15 @@ func DoMove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Se la partita e finita lo comunica al perdente ed elimina la partita dalla memoria
+	// Se la partita e finita lo comunica al perdente, aggiorna i punteggi ed elimina la partita dalla memoria
 	response, is_game_over := IsGameOver(game)
 	if is_game_over {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(response)
-		GamesMu.Lock()
-		delete(Games, game_id)
-		GamesMu.Unlock()
+		if game.P2ID != "bot" {
+			UpdateScore(game_id, game.P2ID, game.P2Ocean.IsFleetDestroyed())
+		}
+		DeleteGame(game_id)
 		return
 	}
 
@@ -136,9 +134,7 @@ func DoMove(w http.ResponseWriter, r *http.Request) {
 	if game.Moves != nil {
 		// Se la partita e finita la elimina
 		if is_game_over {
-			GamesMu.Lock()
-			delete(Games, game_id)
-			GamesMu.Unlock()
+			DeleteGame(game_id)
 			return
 		}
 		moves := game.Moves.Moves

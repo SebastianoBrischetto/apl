@@ -28,15 +28,13 @@ func StartGame(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Controlla se l'access token è valido (commentato per ora).
-	/*
-		err = CheckAccessToken(game_init_data.User, game_init_data.Access_Token)
-		if err != nil {
-			error_message := fmt.Sprintf("Errore: %v", err)
-			http.Error(w, error_message, http.StatusBadRequest)
-			return
-		}
-	*/
+	// Controlla se l'access token è valido.
+	err = CheckAccessToken(game_init_data.User, game_init_data.AccessToken)
+	if err != nil {
+		error_message := fmt.Sprintf("Errore: %v", err)
+		http.Error(w, error_message, http.StatusBadRequest)
+		return
+	}
 
 	// Crea la griglia del giocatore che ha creato la partita.
 	p1_ocean, err := CreatePlayerOcean(game_init_data.GameData)
@@ -44,6 +42,10 @@ func StartGame(w http.ResponseWriter, r *http.Request) {
 		error_message := fmt.Sprintf("Errore: %v", err)
 		http.Error(w, error_message, http.StatusBadRequest)
 		return
+	}
+	var ships []game_elements.ShipType
+	for _, ship := range game_init_data.GameData.Ships {
+		ships = append(ships, ship.ShipType)
 	}
 
 	// Inizia la partita in base al tipo richiesto.
@@ -63,7 +65,9 @@ func StartGame(w http.ResponseWriter, r *http.Request) {
 		Games[game_id] = Game{
 			GameID:   game_id,
 			P1Ocean:  &p1_ocean,
+			Ships:    ships,
 			P2Ocean:  &bot_ocean,
+			P2ID:     "bot",
 			Moves:    &bot_moves,
 			P1Turn:   true,
 			LastMove: nil,
@@ -78,7 +82,9 @@ func StartGame(w http.ResponseWriter, r *http.Request) {
 		Games[game_id] = Game{
 			GameID:   game_id,
 			P1Ocean:  &p1_ocean,
+			Ships:    ships,
 			P2Ocean:  nil,
+			P2ID:     "",
 			Moves:    nil,
 			P1Turn:   true,
 			LastMove: nil,
