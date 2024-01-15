@@ -1,10 +1,10 @@
 ﻿using System.Text;
 using cs.Logic.GameLogic.MatchElements;
+using cs.Logic.GameLogic.MatchElements.Structs;
 using cs.Logic.UserLogic;
 using Newtonsoft.Json;
-using cs.Logic.GameLogic.MatchElements.Structs;
 
-namespace cs.Communications.HttpRequests;
+namespace cs.Communications;
 public static class MatchRequest
 {
     public static async Task CheckPlayersTurn()
@@ -44,7 +44,7 @@ public static class MatchRequest
             Console.WriteLine($"Errore durante l'esecuzione del metodo: {ex.Message}");
         }
     }
-     public static async Task SendMoves(string gameId, int x, int y, Opponent opponent)
+     public static async Task SendMoves(string gameId, int x, int y)
     {
         using (HttpClient client = new HttpClient())
         {

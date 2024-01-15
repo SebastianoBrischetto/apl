@@ -1,7 +1,7 @@
-﻿using cs.Logic.GameLogic.GameElements;
+﻿using cs.Communications;
+using cs.Logic.GameLogic.GameElements;
 using cs.Logic.GameLogic.MatchElements;
 using cs.GUIConsole;
-using cs.Communications.HttpRequests;
 using cs.Logic.GameLogic.MatchElements.Structs;
 using cs.Logic.UserLogic;
 
@@ -17,26 +17,14 @@ public static class MatchManager
 
         if (valid)
         {
-            /*Console.WriteLine("Mosse del bot:");
-            foreach (Move move in Match.Instance.Bot.Moves)
-            {
-                Console.WriteLine($"{move.X}||{move.Y}");
-            }
-            Console.WriteLine("Celle occupate dal bot");
-            foreach (OccupiedCoordinates coords in Match.Instance.Bot.OccupiedCoordinates)
-            {
-                Console.WriteLine($"{coords.X}||{coords.Y}");
-            }
-            Console.WriteLine("GRIGLIA NEMICA:");*/
             Match.Instance.Bot.FillCells();
-            //Match.Instance.Bot.Ocean.PrintPlacement();
         }
         else
         {
-            Console.WriteLine("Bot attualmente vuoto");
+            Console.WriteLine("Bot non caricato correttamente");
         }
     }
-    public static void Attack(Ocean opponentOcean)
+    public static void PlayerAttacksBot(Ocean opponentOcean)
     {
         bool valid = false;
         int row;
@@ -49,21 +37,20 @@ public static class MatchManager
         }
         opponentOcean.PrintInGame();
     }
-    public static void BotAttack(Ocean playerOcean, int round)
+    public static void BotAttacksPlayer(Ocean playerOcean, int round)
     {
         Move move = Match.Instance.Bot.Moves[round];
         playerOcean.Attack(move.X, move.Y);
         playerOcean.PrintInGame();
     }
     
-    public static void OpponentAttackPlayer(Ocean playerOcean)
+    public static void OpponentAttacksPlayer(Ocean playerOcean)
     {
         Move move = Match.Instance.OpponentLastMove;
         playerOcean.Attack(move.X, move.Y);
-        //playerOcean.PrintInGame();
     }
     
-    public static void PlayerAttackOpponent(Ocean opponentOcean)
+    public static void PlayerAttacksOpponent(Ocean opponentOcean)
     {
         do
         {
@@ -84,10 +71,8 @@ public static class MatchManager
                 Console.WriteLine("Cella già attaccata in precedenza, riprova!");
             }
         }
-        MatchRequest.SendMoves(User.Instance.Username, row, column, Match.Instance.Opponent);
+        MatchRequest.SendMoves(User.Instance.Username, row, column);
         Thread.Sleep(2000);
-        Console.WriteLine($"Game over: {Match.Instance.IsGameOver}");
-        Console.WriteLine($"HIT: {Match.Instance.LastMoveHit}");
         Match.Instance.Opponent.Ocean.UpdateOcean
             (Match.Instance.PlayersLastMoves.Last().X, Match.Instance.PlayersLastMoves.Last().Y, Match.Instance.LastMoveHit);
         if (!Match.Instance.IsGameOver)
@@ -96,7 +81,7 @@ public static class MatchManager
             Match.Instance.Opponent.Ocean.Cells[row, column].IsAttacked = true;
             Console.WriteLine("---OCEANO DA ATTACCARE---");
             opponentOcean.PrintInGame();
-            OpponentAttackPlayer(PlayerOcean);
+            OpponentAttacksPlayer(PlayerOcean);
             if (Match.Instance.OpponentLastMove.X != -1 && Match.Instance.OpponentLastMove.Y != -1 )
             {
                 PlayerOcean.Attack(Match.Instance.OpponentLastMove.X,Match.Instance.OpponentLastMove.Y);
@@ -137,14 +122,14 @@ public static class MatchManager
             if (isBot)
             {
                 Console.WriteLine($"Turno {round+1} del giocatore: ");
-                Attack(Match.Instance.Bot.Ocean);
+                PlayerAttacksBot(Match.Instance.Bot.Ocean);
                 if (CheckVictory(Match.Instance.Bot.Ocean, isBot))
                 {
                     Console.WriteLine("Il giocatore ha vinto!");
                     return;
                 }
                 Console.WriteLine($"Turno {round+1} del bot: ");
-                BotAttack(PlayerOcean, round);
+                BotAttacksPlayer(PlayerOcean, round);
                 if (CheckVictory(PlayerOcean, false))
                 {
                     Console.WriteLine("Il bot ha vinto!");
@@ -154,13 +139,12 @@ public static class MatchManager
             }
             else
             {
-                 PlayerAttackOpponent(Match.Instance.Opponent.Ocean);
+                 PlayerAttacksOpponent(Match.Instance.Opponent.Ocean);
                  Match.Instance.IsPlayerOneTurn = false;
             }
         } 
         Console.WriteLine("Fine partita!");
     }
-    /////////////////////////////
     public static void TurnsJoin()
     {
         while (!Match.Instance.IsGameOver)
@@ -193,7 +177,7 @@ public static class MatchManager
                 Console.WriteLine("Cella già attaccata in precedenza, riprova!");
             }
         }
-        MatchRequest.SendMoves(Match.Instance.Code, row, column, Match.Instance.Opponent);
+        MatchRequest.SendMoves(Match.Instance.Code, row, column);
         Thread.Sleep(2000);
         Console.WriteLine($"Game over: {Match.Instance.IsGameOver}");
         Console.WriteLine($"HIT: {Match.Instance.LastMoveHit}");
@@ -225,6 +209,5 @@ public static class MatchManager
     {
             Move move = Match.Instance.OpponentLastMove;
             playerOcean.Attack(move.X, move.Y);
-        //playerOcean.PrintInGame();
     }
 }

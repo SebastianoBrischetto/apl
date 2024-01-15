@@ -4,9 +4,6 @@ namespace cs.Logic.GameLogic.MatchElements;
 public class Opponent
 {
     public Ocean Ocean { get; set; }
-    
-    //public int IntLastMoveX { get; set; }
-    //public int IntLastMoveY { get; set; }
 
     public Opponent()
     {

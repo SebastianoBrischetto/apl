@@ -2,10 +2,6 @@
 {
     public class Cell
     {
-        //Attributi
-        private bool _isHitten;
-        
-        //Proprietà
         public int Row { get; set; }
 
         public int Column { get; set; }
@@ -14,11 +10,7 @@
 
         public bool IsAttacked { get; set; }
 
-        public bool IsHitten
-        {
-            get => _isHitten;
-            set => IsAttacked = value;
-        }
+        public bool IsHitten { get; set; }
         
         public Cell(int row, int column, bool isOccupied = false)
         {
@@ -26,7 +18,7 @@
             Column = column;
             IsOccupied = isOccupied;
             IsAttacked = false;
-            _isHitten = false;
+            IsHitten = false;
         }
         
     }

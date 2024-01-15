@@ -1,12 +1,11 @@
 ﻿using System.Text;
 using cs.Logic.GameLogic.GameElements;
-using cs.Logic.GameLogic.Managers;
 using cs.Logic.GameLogic.MatchElements;
 using cs.Logic.UserLogic;
 using Newtonsoft.Json;
 using Formatting = System.Xml.Formatting;   
     
-namespace cs.Communications.HttpRequests
+namespace cs.Communications
 {
     public static class GameRequests
     { 

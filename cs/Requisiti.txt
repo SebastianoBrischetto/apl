@@ -1,0 +1,3 @@
+﻿Installare Package :
+    Newtonsoft.Json
+    System.Text.Json

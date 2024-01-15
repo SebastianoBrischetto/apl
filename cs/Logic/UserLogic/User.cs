@@ -36,7 +36,6 @@ namespace cs.Logic.UserLogic
             }
         }
         
-        //Proprietà
         public string Username { get; set; }
 
         public string Password { get; set; }
