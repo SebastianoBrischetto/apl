@@ -1,5 +1,5 @@
-﻿using cs.Logic.GameLogic.GameElements;
-using cs.Communications.HttpRequests;
+﻿using cs.Communications;
+using cs.Logic.GameLogic.GameElements;
 using cs.GUIConsole;
 using cs.Logic.UserLogic;
 using cs.Logic.GameLogic.MatchElements;
@@ -26,32 +26,55 @@ namespace cs.Logic.GameLogic.Managers
         {
             string username = GUI.GetStringInput("Inserisci username: ", 8);
             string password = GUI.GetStringInput("Inserisci password: ", 8);
-            Console.WriteLine("Eseguo login");
             string token = await LoginRequest.GetToken(username, password);
             User.Instance.Username = username;
             User.Instance.Password = password;
             User.Instance.Token = token;
-            Console.WriteLine($"Creato l'utente:");
-            Console.WriteLine(User.Instance.ToString());
         }
 
-        public static async Task InizializeGame(string username, string token)
+        public static async Task StartGame(string username, string token)
         {
-            string gameType = GUI.GetStringInput("Vuoi giocare contro un bot o contro un avversario online?");
+            string gameType = "";
+            bool valid = false;
+            while (!valid)
+            {
+                gameType = GUI.GetStringInput
+                    ("Digita 'bot' per giocare contro un algoritmo implementato nel server o digita 'player' per giocare contro un altro utente:");
+                if (gameType == "bot" || gameType == "player")
+                {
+                    valid = true;
+                }
+            }
             string gameCode = User.Instance.Username;
             if (gameType == "bot")
             {
-                //gameCode = GUI.GetIntInput("Inserisci il livello del bot ", 0, 3);
-                gameCode = GUI.GetStringInput("Inserisci il livello de bot (da 0 a 3)");
+                valid = false;
+                while (!valid)
+                {
+                    gameCode = GUI.GetStringInput("Inserisci il livello di intelligenza del bot: 0 = facile, 1 = intermedio, 2 = difficile, 3 = avanzato: ");
+                    switch (gameCode)
+                    {
+                        case "0":
+                            valid = true;
+                            break;
+                        case "1":
+                            valid = true;
+                            break;
+                        case "2":
+                            valid = true;
+                            break;
+                        case "3":
+                            valid = true;
+                            break;
+                        default:
+                            valid = false;
+                            break;
+                    }
+                }
             }
-            Console.WriteLine("Iniziamo!");
             Ocean ocean = CreateOcean();
             string request = GameRequests.JsonCreateGame
                 (username, token, gameType, gameCode, ocean.Columns, ocean.Rows, ocean.Ships);
-            /*
-             Console.WriteLine("Stai per mandare la seguente richiesta:");
-            Console.WriteLine(request);
-            */
             string serverUrl = "http://localhost:8080/start-game";
             bool response = await GameRequests.StartGame(request, serverUrl);
             if (response)
@@ -92,7 +115,6 @@ namespace cs.Logic.GameLogic.Managers
                 gameFound = await GameRequests.CheckGameToJoin(code);
                 Console.WriteLine(gameFound);
             }
-            //La partita esiste e ho i dati, adesso devo fare richiesta per accedere
             Match.Instance.InizializeMatch(code, Match.Instance.Rows, Match.Instance.Columns, Match.Instance.ShipsCodes.Length, false);
             Ocean ocean = new Ocean(Match.Instance.Rows, Match.Instance.Columns, Match.Instance.ShipsCodes.Length, Match.Instance.ShipsCodes);
             MatchManager.PlayerOcean = ocean;
