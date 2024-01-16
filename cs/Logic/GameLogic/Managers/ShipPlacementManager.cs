@@ -12,7 +12,7 @@ namespace cs.Logic.GameLogic.Managers
             {
                 foreach (Cell cell in ocean.OccupiedCells)
                 {
-                    if ((cell.Row > x - length && cell.Row < x)&&(cell.Column == y))
+                    if ((cell.Row >= x - length + 1 && cell.Row <= x)&&(cell.Column == y))
                     {
                         throw new OutOfOceanException();
                     }
@@ -25,6 +25,7 @@ namespace cs.Logic.GameLogic.Managers
             catch (OutOfOceanException e)
             {
                 Console.WriteLine(e.Message);
+                return null;
             }
 
             Cell[] occupiedCells = new Cell[length];
@@ -54,7 +55,7 @@ namespace cs.Logic.GameLogic.Managers
             {
                 foreach (Cell cell in ocean.OccupiedCells)
                 {
-                    if ((cell.Row == x) && (cell.Column > y && cell.Column < y + length)) //(cell.Row > x - length && cell.Row < x)&&(cell.Column == y)
+                    if ((cell.Row == x) && (cell.Column >= y && cell.Column <= y + length - 1)) //(cell.Row > x - length && cell.Row < x)&&(cell.Column == y)
                     {
                         throw new OutOfOceanException();
                     }
@@ -67,6 +68,7 @@ namespace cs.Logic.GameLogic.Managers
             catch (OutOfOceanException e)
             {
                 Console.WriteLine(e.Message);
+                return null;
             }
             
             Cell[] occupiedCells = new Cell[length];
@@ -88,7 +90,7 @@ namespace cs.Logic.GameLogic.Managers
             {
                 foreach (Cell cell in ocean.OccupiedCells)
                 {
-                    if ((cell.Row > x && cell.Row < x + length)&&(cell.Column == y))
+                    if ((cell.Row >= x && cell.Row <= x + length - 1)&&(cell.Column == y))
                     {
                         throw new OutOfOceanException();
                     }
@@ -101,6 +103,7 @@ namespace cs.Logic.GameLogic.Managers
             catch (OutOfOceanException e)
             {
                 Console.WriteLine(e.Message);
+                return null;
             }
             
             Cell[] occupiedCells = new Cell[length];
@@ -123,7 +126,7 @@ namespace cs.Logic.GameLogic.Managers
             {
                 foreach (Cell cell in ocean.OccupiedCells)
                 {
-                    if ((cell.Row == x) && (cell.Column > y - length && cell.Column < y)){
+                    if ((cell.Row == x) && (cell.Column >= y - length + 1 && cell.Column <= y)){
                         throw new OutOfOceanException();
                     }
                 }
@@ -135,6 +138,7 @@ namespace cs.Logic.GameLogic.Managers
             catch (OutOfOceanException e)
             {
                 Console.WriteLine(e.Message);
+                return null;
             }
             
             Cell[] occupiedCells = new Cell[length];

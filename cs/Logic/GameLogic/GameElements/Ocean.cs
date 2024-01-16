@@ -78,7 +78,7 @@ namespace cs.Logic.GameLogic.GameElements
                     int row = GUI.GetIntInput($"Inserisci la riga della nave {i + 1} ", 0, ocean.Rows - 1);
                     int column = GUI.GetIntInput($"Inserisci la colonna della nave {i + 1} ", 0, ocean.Columns - 1);
                     int code = GUI.GetIntInput($"Inserisci il codice della nave {i + 1} ", 1, 5);
-                    int direction = GUI.GetIntInput($"Inserisci la direzione della nave {i + 1} ", 0, 3);
+                    int direction = GUI.GetIntInput($"Inserisci la direzione della nave {i + 1} 0 = UP, 1 = LEFT, 2 = DOWN, 3 = RIGHT ", 0, 3);
                     Ship ship = new Ship(row, column, (Direction)direction, code, this);
                     if (ship.OccupiedCells != null)
                     {

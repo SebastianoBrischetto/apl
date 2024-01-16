@@ -12,7 +12,7 @@ namespace cs
             while (!valid)
             {
                 Console.WriteLine(
-                    "Enter 'start' to initiate a new game or 'join' to join an existing game:");
+                    "Digita 'start' per creare una nuova partito o digita 'join' per accedere ad una partita già creata:");
                 string mode = Console.ReadLine();
                 switch (mode)
                 {
@@ -25,7 +25,7 @@ namespace cs
                         valid = true;
                         break;
                     default:
-                        Console.WriteLine("Enter a valid input!");
+                        Console.WriteLine("Inserisci un'opzione valida!");
                         break;
                 }
             }

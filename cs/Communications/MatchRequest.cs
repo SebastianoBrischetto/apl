@@ -61,8 +61,6 @@ public static class MatchRequest
                 }
             };
             string jsonData = JsonConvert.SerializeObject(data);
-            Console.WriteLine("Invio la seguente mossa:");
-            Console.WriteLine(jsonData);
             client.DefaultRequestHeaders.Accept.Add
                 (new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -72,18 +70,8 @@ public static class MatchRequest
                 if (response.IsSuccessStatusCode)
                 {
                     Match.Instance.PlayersLastMoves.Add(new Move { X = x, Y = y });
-                    if (Match.Instance.PlayersLastMoves.Count > 0)
-                    {
-                        Console.WriteLine("Mosse precedenti:");
-                        foreach (Move move in Match.Instance.PlayersLastMoves)
-                        {
-                            Console.WriteLine(move.X);
-                            Console.WriteLine(move.X);
-                        }
-                    }
                     Match.Instance.IsPlayerOneTurn = true;
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(jsonResponse);
                     dynamic responseObject = JsonConvert.DeserializeObject(jsonResponse);
                     if (responseObject.is_occupied != null)
                     {
@@ -92,6 +80,14 @@ public static class MatchRequest
                     else
                     {
                         Match.Instance.IsGameOver = true;
+                        if (responseObject.p1_won == true)
+                        {
+                            Console.WriteLine("Vittoria del giocatore 1");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Vittoria del giocatore 2");
+                        }
                     }
                     if (responseObject.last_move != null)
                     {
