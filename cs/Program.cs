@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using cs.Logic.GameLogic.Managers;
+﻿using cs.Logic.GameLogic.Managers;
 using cs.Logic.UserLogic;
 
 namespace cs
