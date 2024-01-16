@@ -1,10 +1,8 @@
-<<<<<<< Updated upstream
-﻿//QUELLO DA TESTARE
+﻿using System;
+using System.Threading.Tasks;
 using cs.Logic.GameLogic.Managers;
-=======
-﻿using cs.Logic.GameLogic.Managers;
->>>>>>> Stashed changes
 using cs.Logic.UserLogic;
+
 namespace cs
 {
     static class Program
@@ -12,22 +10,11 @@ namespace cs
         private static async Task Main()
         {
             await GameManager.Login();
-<<<<<<< Updated upstream
-            Console.WriteLine(
-                "Vuoi creare una nuova partita (start) o partecipare ad una partita già avviata (join)?: ");
-            string mode = Console.ReadLine();
-            if (mode == "start")
-            {
-                await GameManager.InizializeGame(User.Instance.Username, User.Instance.Token);
-            }
-            else
-            {
-                await GameManager.JoinGame();
-=======
             bool valid = false;
-            while(!valid){
+            while (!valid)
+            {
                 Console.WriteLine(
-                    "Digita 'start' per avviare una nuova partita o digira 'join' per accedere ad una partita già avviata:");
+                    "Enter 'start' to initiate a new game or 'join' to join an existing game:");
                 string mode = Console.ReadLine();
                 switch (mode)
                 {
@@ -35,16 +22,14 @@ namespace cs
                         await GameManager.StartGame(User.Instance.Username, User.Instance.Token);
                         valid = true;
                         break;
-                    case "join": 
+                    case "join":
                         await GameManager.JoinGame();
                         valid = true;
                         break;
                     default:
-                        Console.WriteLine("Inserisci un valore valido!");
-                        valid = true;
+                        Console.WriteLine("Enter a valid input!");
                         break;
                 }
->>>>>>> Stashed changes
             }
         }
     }

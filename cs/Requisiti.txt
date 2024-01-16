@@ -1,3 +1,2 @@
 ﻿Installare Package :
-    Newtonsoft.Json
-    System.Text.Json
+    Newtonsoft.Json     dotnet add package Newtonsoft.Json
