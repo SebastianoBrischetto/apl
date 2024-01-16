@@ -113,7 +113,6 @@ namespace cs.Logic.GameLogic.Managers
             {
                 code = GUI.GetStringInput("Inserisci il codice della stanza a cui accedere:");
                 gameFound = await GameRequests.CheckGameToJoin(code);
-                Console.WriteLine(gameFound);
             }
             Match.Instance.InizializeMatch(code, Match.Instance.Rows, Match.Instance.Columns, Match.Instance.ShipsCodes.Length, false);
             Ocean ocean = new Ocean(Match.Instance.Rows, Match.Instance.Columns, Match.Instance.ShipsCodes.Length, Match.Instance.ShipsCodes);

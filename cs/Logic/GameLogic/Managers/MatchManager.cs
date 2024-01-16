@@ -152,6 +152,7 @@ public static class MatchManager
             PlayerTwoAttackPlayerOne(Match.Instance.Opponent.Ocean);
             Match.Instance.IsPlayerOneTurn = true;
         } 
+        if(Match.Instance.IsGameOver)
         Console.WriteLine("Fine partita!");
     }
     

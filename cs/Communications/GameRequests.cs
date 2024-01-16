@@ -24,7 +24,6 @@ namespace cs.Communications
                     if (response.IsSuccessStatusCode)
                     {
                         Console.WriteLine("Partita avviata!");
-                        Console.WriteLine(response);
                         return true;
                     }
                     Console.WriteLine($"Errore nella richiesta. Codice di stato: {response.StatusCode}");
@@ -38,7 +37,6 @@ namespace cs.Communications
                 }
             }
         }
-        //Metodo per formattare i dati in un JSON da passare come contenuto della richiesta POST
         public static string JsonCreateGame(string username, string token, string gameType, string gameCode, int columns, int rows, Ship[] ships)
         {
             if (gameType == "bot")
@@ -154,24 +152,17 @@ namespace cs.Communications
                     HttpResponseMessage response = await client.GetAsync(url);
                     if (response.IsSuccessStatusCode)
                     {
-                        //la partita esiste
                         string responseData = await response.Content.ReadAsStringAsync();
-                        // Deserializza la risposta JSON in un oggetto dynamic
                         dynamic jsonResponse = JsonConvert.DeserializeObject(responseData);
-                        // Estrai i valori desiderati
                         int columns = jsonResponse.p1_ocean.columns;
                         int rows = jsonResponse.p1_ocean.rows;
                         int[] shipsCodes = jsonResponse.ships.ToObject<int[]>();
                         Match.Instance.Rows = rows;
                         Match.Instance.Columns = columns;
                         Match.Instance.ShipsCodes = shipsCodes;
-                        Console.WriteLine(Match.Instance.Rows);
-                        Console.WriteLine(Match.Instance.Columns);
-                        Console.WriteLine(Match.Instance.ShipsCodes);
                         
                         return true;
                     }
-                        //la partita non esiste
                         Console.WriteLine("Partita non provata, inserisci un codice valido!");
                         return false;
                     
